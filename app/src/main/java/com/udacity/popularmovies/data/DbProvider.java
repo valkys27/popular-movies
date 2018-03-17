@@ -9,5 +9,4 @@ import android.database.sqlite.SQLiteDatabase;
 public interface DbProvider {
     SQLiteDatabase getWritableDatabase();
     SQLiteDatabase getReadableDatabase();
-    void close();
 }

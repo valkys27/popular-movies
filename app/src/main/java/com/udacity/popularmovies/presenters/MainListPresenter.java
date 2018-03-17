@@ -8,17 +8,15 @@ import android.view.View;
 import android.widget.*;
 
 import com.udacity.popularmovies.Category;
+import com.udacity.popularmovies.PopularMoviesApp;
 import com.udacity.popularmovies.R;
 import com.udacity.popularmovies.activities.DetailActivity;
 import com.udacity.popularmovies.adapters.MovieAdapter;
-import com.udacity.popularmovies.data.dao.*;
 import com.udacity.popularmovies.network.Network;
 import com.udacity.popularmovies.pojo.Movie;
 import com.udacity.popularmovies.views.MainListView;
 
 import java.util.List;
-
-import javax.inject.Inject;
 
 /**
  * Created by tomas on 28.02.2018.
@@ -36,6 +34,7 @@ public class MainListPresenter extends BasePresenter<MainListView> {
     private AdapterView.OnItemSelectedListener onCategorySelectedListener;
 
     public MainListPresenter() {
+        PopularMoviesApp.getAppComponent().injectMainListPresenter(this);
         this.onCategorySelectedListener = new OnCategorySelectedListener();
     }
 

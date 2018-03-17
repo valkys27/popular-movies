@@ -6,9 +6,6 @@ import android.support.annotation.NonNull;
 import android.widget.Toast;
 
 import com.hannesdorfmann.mosby3.mvp.*;
-import com.udacity.popularmovies.PopularMoviesApp;
-import com.udacity.popularmovies.dagger.components.AppComponent;
-import com.udacity.popularmovies.dagger.modules.AppModule;
 import com.udacity.popularmovies.presenters.BasePresenter;
 
 import butterknife.ButterKnife;
@@ -23,7 +20,6 @@ public abstract class BaseActivity<V extends MvpView, P extends BasePresenter<V>
     public abstract P createPresenter();
     protected abstract int getLayoutId();
     protected abstract void setTitle();
-    protected abstract void injectPresenter();
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -31,7 +27,6 @@ public abstract class BaseActivity<V extends MvpView, P extends BasePresenter<V>
         setContentView(getLayoutId());
         ButterKnife.bind(this);
         setTitle();
-        injectPresenter();
         getPresenter().readFromBundle(savedInstanceState);
         init();
         getPresenter().loadData();

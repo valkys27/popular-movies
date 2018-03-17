@@ -3,12 +3,10 @@ package com.udacity.popularmovies.presenters;
 import android.os.Bundle;
 import android.util.Log;
 
-import com.udacity.popularmovies.data.dao.*;
+import com.udacity.popularmovies.PopularMoviesApp;
 import com.udacity.popularmovies.network.Network;
 import com.udacity.popularmovies.pojo.Movie;
 import com.udacity.popularmovies.views.DetailView;
-
-import javax.inject.Inject;
 
 /**
  * Created by tomas on 05.03.2018.
@@ -23,6 +21,10 @@ public class DetailPresenter extends BasePresenter<DetailView> {
     private int _id;
     private int serverId;
     private boolean loaded = false;
+
+    public DetailPresenter() {
+        PopularMoviesApp.getAppComponent().injectDetailPresenter(this);
+    }
 
     @Override
     public void writeToBundle(Bundle bundle) {

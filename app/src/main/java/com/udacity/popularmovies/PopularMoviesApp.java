@@ -5,10 +5,8 @@ import android.content.Context;
 
 import com.jakewharton.threetenabp.AndroidThreeTen;
 import com.squareup.picasso.*;
-import com.udacity.popularmovies.dagger.components.AppComponent;
-import com.udacity.popularmovies.dagger.components.DaggerAppComponent;
+import com.udacity.popularmovies.dagger.components.*;
 import com.udacity.popularmovies.dagger.modules.AppModule;
-import com.udacity.popularmovies.dagger.modules.DbModule;
 
 /**
  * Created by tomas on 01.03.2018.

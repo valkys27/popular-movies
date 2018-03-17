@@ -40,11 +40,6 @@ public class MainListActivity extends BaseActivity<MainListView, MainListPresent
     }
 
     @Override
-    protected void injectPresenter() {
-        PopularMoviesApp.getAppComponent().injectMainListPresenter(getPresenter());
-    }
-
-    @Override
     protected void init() {
         mMovieAdapter = new MovieAdapter(this, getPresenter().getPosterClickHandler());
         getPresenter().initRecyclerView(mRecyclerView, mMovieAdapter);

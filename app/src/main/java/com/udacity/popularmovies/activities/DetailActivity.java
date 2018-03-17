@@ -58,11 +58,6 @@ public class DetailActivity extends BaseActivity<DetailView, DetailPresenter> im
     }
 
     @Override
-    protected void injectPresenter() {
-        PopularMoviesApp.getAppComponent().injectDetailPresenter(getPresenter());
-    }
-
-    @Override
     public void setData(Movie movie) {
         title.setText(movie.getTitle());
         releaseDate.setText(Integer.toString(movie.getReleaseDate().getYear()));

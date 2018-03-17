@@ -25,7 +25,7 @@
                 android:layout_height="wrap_content"
                 android:layout_marginBottom="@dimen/margin_small"
                 android:layout_marginEnd="@dimen/margin_small"
-                android:layout_marginStart="@dimen/margin_medium"
+                android:layout_marginStart="@dimen/margin_small"
                 android:layout_marginTop="@dimen/margin_small"
                 android:maxLines="2"
                 android:minLines="1"
@@ -49,34 +49,58 @@
             app:layout_constraintTop_toBottomOf="@+id/title_background_cl" />
 
         <TextView
-            android:id="@+id/releaseDate_tv"
-            android:layout_width="wrap_content"
-            style="@style/detail_activity_text_view"
-            android:textAppearance="@style/TextAppearance.AppCompat.Large"
+            android:id="@+id/overview_tv"
+            android:layout_width="0dp"
+            android:layout_weight="1"
+            android:layout_height="wrap_content"
+            android:layout_marginEnd="@dimen/margin_medium"
+            android:layout_marginStart="@dimen/margin_large"
+            android:layout_marginTop="@dimen/margin_medium"
+            app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toEndOf="@+id/detailPoster_iv"
             app:layout_constraintTop_toBottomOf="@+id/title_background_cl"
-            tools:text="2015" />
+            app:layout_constraintWidth_default="wrap"
+            tools:text="Every child comes into world full of promise, and none more so than Chappie: he is gifted, special, a prodigy. Chappie he is a robot."
+            />
 
-        <TextView
-            android:id="@+id/runtime_tv"
-            android:layout_width="wrap_content"
-            style="@style/detail_activity_text_view"
-            android:textAppearance="@style/TextAppearance.AppCompat.Large"
-            android:textStyle="italic"
-            tools:text="120min"
+        <LinearLayout
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:id="@+id/detail_info_ll"
+            android:orientation="horizontal"
             app:layout_constraintStart_toEndOf="@+id/detailPoster_iv"
-            app:layout_constraintTop_toBottomOf="@+id/releaseDate_tv" />
+            app:layout_constraintTop_toBottomOf="@id/overview_tv"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintWidth_default="spread">
 
-        <TextView
-            android:id="@+id/voteAverage_tv"
-            android:layout_width="wrap_content"
-            style="@style/detail_activity_text_view"
-            android:textAppearance="@style/TextAppearance.AppCompat.Large"
-            android:textStyle="bold"
-            android:textColor="@android:color/primary_text_light"
-            tools:text="8.1/10"
-            app:layout_constraintStart_toEndOf="@+id/detailPoster_iv"
-            app:layout_constraintTop_toBottomOf="@+id/runtime_tv" />
+            <TextView
+                android:id="@+id/releaseDate_tv"
+                android:layout_width="0dp"
+                android:layout_weight="1"
+                style="@style/detail_activity_text_view"
+                android:textAppearance="@style/TextAppearance.AppCompat.Large"
+                tools:text="2015" />
+
+            <TextView
+                android:id="@+id/runtime_tv"
+                android:layout_width="0dp"
+                android:layout_weight="1"
+                style="@style/detail_activity_text_view"
+                android:textAppearance="@style/TextAppearance.AppCompat.Large"
+                android:textStyle="italic"
+                tools:text="120min" />
+
+            <TextView
+                android:id="@+id/voteAverage_tv"
+                android:layout_width="0dp"
+                android:layout_weight="1"
+                style="@style/detail_activity_text_view"
+                android:textAppearance="@style/TextAppearance.AppCompat.Large"
+                android:textStyle="bold"
+                android:textColor="@android:color/primary_text_light"
+                tools:text="8.1/10" />
+
+        </LinearLayout>
 
         <Button
             android:id="@+id/button"
@@ -87,19 +111,7 @@
             android:background="@color/colorAccentLight"
             android:text="@string/favourite_button_caption"
             app:layout_constraintStart_toEndOf="@+id/detailPoster_iv"
-            app:layout_constraintTop_toBottomOf="@+id/voteAverage_tv" />
-
-        <TextView
-            android:id="@+id/overview_tv"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_marginEnd="@dimen/margin_small"
-            android:layout_marginStart="@dimen/margin_small"
-            android:layout_marginTop="@dimen/margin_medium"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/detailPoster_iv"
-            tools:text="Every child comes into world full of promise, and none more so than Chappie: he is gifted, special, a prodigy. Chappie he is a robot." />
+            app:layout_constraintTop_toBottomOf="@+id/detail_info_ll" />
 
     </android.support.constraint.ConstraintLayout>
 </ScrollView>

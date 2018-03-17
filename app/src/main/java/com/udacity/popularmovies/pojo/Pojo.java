@@ -1,7 +1,6 @@
 package com.udacity.popularmovies.pojo;
 
-import com.google.gson.annotations.Expose;
-import com.google.gson.annotations.SerializedName;
+import com.google.gson.annotations.*;
 
 import org.chalup.microorm.annotations.Column;
 

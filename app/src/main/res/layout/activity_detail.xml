@@ -1,0 +1,101 @@
+<?xml version="1.0" encoding="utf-8"?>
+<android.support.constraint.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    tools:context="com.udacity.popularmovies.activities.DetailActivity">
+
+    <android.support.constraint.ConstraintLayout
+        android:id="@+id/title_background_cl"
+        android:layout_width="match_parent"
+        android:layout_height="85dp"
+        android:background="@color/colorAccent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent">
+
+        <TextView
+            android:id="@+id/title_tv"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginBottom="8dp"
+            android:layout_marginStart="16dp"
+            android:layout_marginTop="8dp"
+            android:textAppearance="@style/TextAppearance.AppCompat.Display1"
+            android:textColor="@android:color/primary_text_dark"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent"
+            tools:text="Chappie" />
+    </android.support.constraint.ConstraintLayout>
+
+    <ImageView
+        android:id="@+id/detailPoster_iv"
+        android:layout_width="154dp"
+        android:layout_height="231dp"
+        android:layout_marginStart="16dp"
+        android:layout_marginTop="8dp"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/title_background_cl" />
+
+    <TextView
+        android:id="@+id/releaseDate_tv"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="32dp"
+        android:layout_marginTop="8dp"
+        android:textAppearance="@style/TextAppearance.AppCompat.Large"
+        app:layout_constraintStart_toEndOf="@+id/detailPoster_iv"
+        app:layout_constraintTop_toBottomOf="@+id/title_background_cl"
+        tools:text="2015" />
+
+    <TextView
+        android:id="@+id/runtime_tv"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="32dp"
+        android:layout_marginTop="8dp"
+        android:textAppearance="@style/TextAppearance.AppCompat.Large"
+        android:textStyle="italic"
+        tools:text="120min"
+        app:layout_constraintStart_toEndOf="@+id/detailPoster_iv"
+        app:layout_constraintTop_toBottomOf="@+id/releaseDate_tv" />
+
+    <TextView
+        android:id="@+id/voteAverage_tv"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="32dp"
+        android:layout_marginTop="8dp"
+        android:textAppearance="@style/TextAppearance.AppCompat.Medium"
+        android:textStyle="bold"
+        android:textColor="@android:color/primary_text_light"
+        tools:text="8.1/10"
+        app:layout_constraintStart_toEndOf="@+id/detailPoster_iv"
+        app:layout_constraintTop_toBottomOf="@+id/runtime_tv" />
+
+    <TextView
+        android:id="@+id/overview_tv"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginEnd="8dp"
+        android:layout_marginStart="8dp"
+        android:layout_marginTop="16dp"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/detailPoster_iv"
+        tools:text="Every child comes into world full of promise, and none more so than Chappie: he is gifted, special, a prodigy. Chappie he is a robot." />
+
+    <Button
+        android:id="@+id/button"
+        android:layout_width="@dimen/favourite_button_width"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="32dp"
+        android:layout_marginTop="8dp"
+        android:background="@color/colorAccentLight"
+        android:text="@string/favourite_button_caption"
+        app:layout_constraintStart_toEndOf="@+id/detailPoster_iv"
+        app:layout_constraintTop_toBottomOf="@+id/voteAverage_tv" />
+
+</android.support.constraint.ConstraintLayout>

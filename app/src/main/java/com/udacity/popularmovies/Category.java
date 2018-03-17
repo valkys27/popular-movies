@@ -1,4 +1,4 @@
-package com.udacity.popularmovies.popularmovies;
+package com.udacity.popularmovies;
 
 /**
  * Created by tomas on 26.02.2018.

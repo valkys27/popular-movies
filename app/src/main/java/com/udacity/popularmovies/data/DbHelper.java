@@ -4,11 +4,14 @@ import android.content.Context;
 import android.database.sqlite.*;
 
 import com.udacity.popularmovies.R;
+import com.udacity.popularmovies.dagger.scope.PerApplication;
+
+import javax.inject.Inject;
 
 /**
  * Created by tomas on 28.02.2018.
  */
-
+@PerApplication
 public class DbHelper extends SQLiteOpenHelper implements DbProvider {
 
     public static final String DATABASE_NAME = "popular_movies.db";
@@ -19,9 +22,10 @@ public class DbHelper extends SQLiteOpenHelper implements DbProvider {
 
     private final SqlParser mSqlParser;
 
-    public DbHelper(Context context) {
+    @Inject
+    public DbHelper(Context context, SqlParser sqlParser) {
         super(context, DATABASE_NAME, null, DATABASE_VERSION);
-        mSqlParser = new SqlParser(context);
+        mSqlParser = sqlParser;
     }
 
     @Override

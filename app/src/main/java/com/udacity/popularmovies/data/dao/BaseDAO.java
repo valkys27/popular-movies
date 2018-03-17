@@ -5,9 +5,8 @@ import android.database.Cursor;
 import android.net.Uri;
 
 import com.udacity.popularmovies.data.MicroOrmTypeAdapters;
-import com.udacity.popularmovies.pojo.Movie;
 import com.udacity.popularmovies.pojo.Pojo;
-import com.udacity.popularmovies.data.PopularMoviesContract;
+import com.udacity.popularmovies.data.*;
 
 import org.chalup.microorm.MicroOrm;
 import org.threeten.bp.LocalDate;
@@ -22,10 +21,12 @@ public abstract class BaseDAO<T extends Pojo> implements DAO<T> {
 
     private static final String ID_KEY = "_id";
 
-    private Context mContext;
+    private final Context mContext;
+    private final MicroOrm mMicroOrm;
 
-    public BaseDAO(Context context) {
+    public BaseDAO(Context context, MicroOrm microOrm) {
         mContext = context;
+        mMicroOrm = microOrm;
     }
 
     abstract protected String getPath();
@@ -40,10 +41,7 @@ public abstract class BaseDAO<T extends Pojo> implements DAO<T> {
                 selectionArgs,
                 sortOrder
         );
-        MicroOrm microOrm = new MicroOrm.Builder()
-                .registerTypeAdapter(LocalDate.class, new MicroOrmTypeAdapters.LocalDateAdapter())
-                .build();
-        return microOrm.listFromCursor(cursor, getEntityClass());
+        return mMicroOrm.listFromCursor(cursor, getEntityClass());
     }
 
     private Uri getUri() {
@@ -63,12 +61,9 @@ public abstract class BaseDAO<T extends Pojo> implements DAO<T> {
 
     @Override
     public int insert(List<T> list) {
-        MicroOrm microOrm = new MicroOrm.Builder()
-                .registerTypeAdapter(LocalDate.class, new MicroOrmTypeAdapters.LocalDateAdapter())
-                .build();
         ContentValues[] cv = new ContentValues[list.size()];
         for (int i = 0; i < list.size(); i++) {
-            cv[i] = microOrm.toContentValues(list.get(i));
+            cv[i] = mMicroOrm.toContentValues(list.get(i));
             cv[i].remove(ID_KEY);
         }
         return mContext.getContentResolver().bulkInsert(getUri(), cv);
@@ -76,10 +71,7 @@ public abstract class BaseDAO<T extends Pojo> implements DAO<T> {
 
     @Override
     public boolean update(T element) {
-        MicroOrm microOrm = new MicroOrm.Builder()
-                .registerTypeAdapter(LocalDate.class, new MicroOrmTypeAdapters.LocalDateAdapter())
-                .build();
-        ContentValues cv = microOrm.toContentValues(element);
+        ContentValues cv = mMicroOrm.toContentValues(element);
         String selection = ID_KEY + " = ?";
         String[] selectionArgs = {Integer.toString(element.get_id())};
         return mContext.getContentResolver().update(getUri(), cv, selection, selectionArgs) == 1;

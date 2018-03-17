@@ -4,9 +4,11 @@ import android.os.Bundle;
 import android.util.Log;
 
 import com.udacity.popularmovies.data.dao.*;
-import com.udacity.popularmovies.network.NetworkUtils;
+import com.udacity.popularmovies.network.Network;
 import com.udacity.popularmovies.pojo.Movie;
 import com.udacity.popularmovies.views.DetailView;
+
+import javax.inject.Inject;
 
 /**
  * Created by tomas on 05.03.2018.
@@ -38,20 +40,18 @@ public class DetailPresenter extends BasePresenter<DetailView> {
 
     @Override
     public void loadData() {
-        MoviesDAO dao = new MoviesDAOImpl(view.getContext());
         if (view != null && loaded)
-            this.view.setData(dao.findById(_id));
+            this.view.setData(moviesDAO.findById(_id));
         else
-            NetworkUtils.findMovieById(serverId, new OnLoadingHandler());
+            network.findMovieById(serverId, new OnLoadingHandler());
     }
 
-    private class OnLoadingHandler implements NetworkUtils.OnLoadingHandler<Movie> {
+    private class OnLoadingHandler implements Network.OnLoadingHandler<Movie> {
         @Override
         public void onLoadingSuccess(Movie data) {
             if (view != null) {
-                MoviesDAO dao = new MoviesDAOImpl(view.getContext());
                 data.set_id(_id);
-                dao.update(data);
+                moviesDAO.update(data);
                 view.setData(data);
                 loaded = true;
             }
@@ -60,8 +60,7 @@ public class DetailPresenter extends BasePresenter<DetailView> {
         @Override
         public void onLoadingFailure(String errorMessage) {
             if (view != null) {
-                MoviesDAO dao = new MoviesDAOImpl(view.getContext());
-                Movie movie = dao.findById(_id);
+                Movie movie = moviesDAO.findById(_id);
                 if (movie == null)
                     loaded = false;
                 else

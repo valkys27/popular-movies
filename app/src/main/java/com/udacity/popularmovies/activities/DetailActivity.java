@@ -5,6 +5,7 @@ import android.support.annotation.*;
 import android.view.MenuItem;
 import android.widget.*;
 
+import com.udacity.popularmovies.PopularMoviesApp;
 import com.udacity.popularmovies.R;
 import com.udacity.popularmovies.pojo.Movie;
 import com.udacity.popularmovies.presenters.*;
@@ -54,6 +55,11 @@ public class DetailActivity extends BaseActivity<DetailView, DetailPresenter> im
     @Override
     protected void setTitle() {
         setTitle("Movie Detail");
+    }
+
+    @Override
+    protected void injectPresenter() {
+        PopularMoviesApp.getAppComponent().injectDetailPresenter(getPresenter());
     }
 
     @Override

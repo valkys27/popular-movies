@@ -3,20 +3,27 @@ package com.udacity.popularmovies.data.dao;
 import android.content.Context;
 
 import com.udacity.popularmovies.Category;
+import com.udacity.popularmovies.dagger.scope.PerApplication;
 import com.udacity.popularmovies.data.PopularMoviesContract;
 import com.udacity.popularmovies.pojo.Movie;
 import com.udacity.popularmovies.data.PopularMoviesContract.MovieEntry;
 
+import org.chalup.microorm.MicroOrm;
+
 import java.util.List;
+
+import javax.inject.Inject;
 
 /**
  * Created by tomas on 01.03.2018.
  */
 
+@PerApplication
 public class MoviesDAOImpl extends BaseDAO<Movie> implements MoviesDAO {
 
-    public MoviesDAOImpl(Context context) {
-        super(context);
+    @Inject
+    public MoviesDAOImpl(Context context, MicroOrm microOrm) {
+        super(context, microOrm);
     }
 
     @Override

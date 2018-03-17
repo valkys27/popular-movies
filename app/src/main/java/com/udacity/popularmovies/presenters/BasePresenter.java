@@ -3,7 +3,10 @@ package com.udacity.popularmovies.presenters;
 import android.os.Bundle;
 
 import com.hannesdorfmann.mosby3.mvp.*;
-import com.udacity.popularmovies.network.NetworkUtils;
+import com.udacity.popularmovies.data.dao.MoviesDAO;
+import com.udacity.popularmovies.network.Network;
+
+import javax.inject.Inject;
 
 /**
  * Created by tomas on 05.03.2018.
@@ -12,6 +15,12 @@ import com.udacity.popularmovies.network.NetworkUtils;
 public abstract class BasePresenter<V extends MvpView> extends MvpBasePresenter<V> {
 
     protected V view;
+
+    @Inject
+    Network network;
+
+    @Inject
+    MoviesDAO moviesDAO;
 
     public abstract void writeToBundle(Bundle bundle);
     public abstract void readFromBundle(Bundle bundle);
@@ -27,6 +36,6 @@ public abstract class BasePresenter<V extends MvpView> extends MvpBasePresenter<
     public void detachView() {
         super.detachView();
         this.view = null;
-        NetworkUtils.cancelAll();
+        network.cancelAll();
     }
 }

@@ -3,13 +3,18 @@ package com.udacity.popularmovies.data;
 import android.content.Context;
 import android.util.Log;
 
+import com.udacity.popularmovies.dagger.scope.PerApplication;
+
 import java.io.*;
 import java.util.Arrays;
+
+import javax.inject.Inject;
 
 /**
  * Created by tomas on 28.02.2018.
  */
 
+@PerApplication
 public class SqlParser {
 
     private final Context context;
@@ -17,6 +22,7 @@ public class SqlParser {
     private BufferedReader bufferedReader;
     private String lines;
 
+    @Inject
     public SqlParser(Context context) {
         this.context = context;
     }

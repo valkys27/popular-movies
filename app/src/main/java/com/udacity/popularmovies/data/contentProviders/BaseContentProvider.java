@@ -6,7 +6,10 @@ import android.database.sqlite.SQLiteDatabase;
 import android.net.Uri;
 import android.support.annotation.*;
 
+import com.udacity.popularmovies.PopularMoviesApp;
 import com.udacity.popularmovies.data.*;
+
+import javax.inject.Inject;
 
 /**
  * Created by tomas on 28.02.2018.
@@ -15,7 +18,9 @@ import com.udacity.popularmovies.data.*;
 public abstract class BaseContentProvider extends ContentProvider {
 
     protected UriMatcher mUriMatcher;
-    protected DbProvider mDbProvider;
+
+    @Inject
+    DbProvider mDbProvider;
 
     abstract protected void setURIs(UriMatcher uriMatcher);
     abstract protected String getTableName();
@@ -33,7 +38,7 @@ public abstract class BaseContentProvider extends ContentProvider {
     @Override
     public boolean onCreate() {
         mUriMatcher = buildUriMatcher();
-        mDbProvider = new DbHelper(getContext());
+        PopularMoviesApp.getAppComponent().injectContentProvider(this);
         return true;
     }
 

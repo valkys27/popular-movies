@@ -27,48 +27,9 @@ public class NetworkModule {
     private static final String JSON_ARRAY_NAME = "results";
     private static final String BASE_URL = "https://api.themoviedb.org/";
 
-    @Provides @PerApplication
-    public TheMovieDbService providesTheMovieDbService() {
-        return providesRetrofit().create(TheMovieDbService.class);
-    }
-
-    @Provides @PerApplication
-    private Retrofit providesRetrofit() {
-        return new Retrofit.Builder()
-                .baseUrl(BASE_URL)
-                .addConverterFactory(GsonConverterFactory.create(providesGson()))
-                .client(providesOkHttpClient())
-                .build();
-    }
-
-    @Provides @PerApplication
-    private Gson providesGson() {
-        return providesBaseGsonBuilder()
-                .registerTypeAdapter(new TypeToken<List<Movie>>() {
-                }.getType(), new JsonDeserializer<List<Movie>>() {
-                    @Override
-                    public List<Movie> deserialize(JsonElement json, Type typeOfT, JsonDeserializationContext context) throws JsonParseException {
-                        JsonArray array = json.getAsJsonObject().get(JSON_ARRAY_NAME).getAsJsonArray();
-                        List<Movie> movies = new ArrayList<>();
-                        for (int i = 0; i < MOVIE_COUNT; i++) {
-                            JsonObject object = array.get(i).getAsJsonObject();
-                            movies.add(providesBaseGson().fromJson(object, Movie.class));
-                        }
-                        return movies;
-                    }
-                })
-                .create();
-    }
-
-    @Provides @PerApplication
-    private GsonBuilder providesBaseGsonBuilder() {
-        return new GsonBuilder()
-                .registerTypeAdapter(LocalDate.class, providesLocalDateAdapter());
-    }
-
     @Provides
     @PerApplication
-    private JsonDeserializer<LocalDate> providesLocalDateAdapter() {
+    public JsonDeserializer<LocalDate> providesLocalDateAdapter() {
         return new JsonDeserializer<LocalDate>() {
             @Override
             public LocalDate deserialize(JsonElement json, Type typeOfT, JsonDeserializationContext context) throws JsonParseException {
@@ -79,12 +40,47 @@ public class NetworkModule {
     }
 
     @Provides @PerApplication
-    private Gson providesBaseGson() {
-        return providesBaseGsonBuilder().create();
+    public OkHttpClient providesOkHttpClient() {
+        return new OkHttpClient();
     }
 
     @Provides @PerApplication
-    private OkHttpClient providesOkHttpClient() {
-        return new OkHttpClient();
+    public GsonBuilder providesBaseGsonBuilder(JsonDeserializer<LocalDate> localDateJsonDeserializer) {
+        return new GsonBuilder()
+                .registerTypeAdapter(LocalDate.class, localDateJsonDeserializer);
+    }
+
+    @Provides @PerApplication
+    public Gson providesGson(GsonBuilder baseGsonBuilder) {
+        final Gson baseGson = baseGsonBuilder.create();
+        return baseGsonBuilder
+                .registerTypeAdapter(new TypeToken<List<Movie>>() {
+                }.getType(), new JsonDeserializer<List<Movie>>() {
+                    @Override
+                    public List<Movie> deserialize(JsonElement json, Type typeOfT, JsonDeserializationContext context) throws JsonParseException {
+                        JsonArray array = json.getAsJsonObject().get(JSON_ARRAY_NAME).getAsJsonArray();
+                        List<Movie> movies = new ArrayList<>();
+                        for (int i = 0; i < MOVIE_COUNT; i++) {
+                            JsonObject object = array.get(i).getAsJsonObject();
+                            movies.add(baseGson.fromJson(object, Movie.class));
+                        }
+                        return movies;
+                    }
+                })
+                .create();
+    }
+
+    @Provides @PerApplication
+    public TheMovieDbService providesTheMovieDbService(Retrofit retrofit) {
+        return retrofit.create(TheMovieDbService.class);
+    }
+
+    @Provides @PerApplication
+    public Retrofit providesRetrofit(Gson gson, OkHttpClient okHttpClient) {
+        return new Retrofit.Builder()
+                .baseUrl(BASE_URL)
+                .addConverterFactory(GsonConverterFactory.create(gson))
+                .client(okHttpClient)
+                .build();
     }
 }

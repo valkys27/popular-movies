@@ -12,11 +12,13 @@ import com.udacity.popularmovies.R;
 import com.udacity.popularmovies.activities.DetailActivity;
 import com.udacity.popularmovies.adapters.MovieAdapter;
 import com.udacity.popularmovies.data.dao.*;
-import com.udacity.popularmovies.network.NetworkUtils;
+import com.udacity.popularmovies.network.Network;
 import com.udacity.popularmovies.pojo.Movie;
 import com.udacity.popularmovies.views.MainListView;
 
 import java.util.List;
+
+import javax.inject.Inject;
 
 /**
  * Created by tomas on 28.02.2018.
@@ -32,7 +34,6 @@ public class MainListPresenter extends BasePresenter<MainListView> {
     private boolean loadedTopRated = false;
     private int category = 0;
     private AdapterView.OnItemSelectedListener onCategorySelectedListener;
-
 
     public MainListPresenter() {
         this.onCategorySelectedListener = new OnCategorySelectedListener();
@@ -75,7 +76,7 @@ public class MainListPresenter extends BasePresenter<MainListView> {
         if (view != null && isLoaded())
             loadMovies();
         else
-            NetworkUtils.getMovieListBy(Category.values()[category], new OnLoadingHandler());
+            network.getMovieListBy(Category.values()[category], new OnLoadingHandler());
     }
 
     private boolean isLoaded() {
@@ -83,8 +84,7 @@ public class MainListPresenter extends BasePresenter<MainListView> {
     }
 
     private void loadMovies() {
-        MoviesDAO dao = new MoviesDAOImpl(view.getContext());
-        this.view.setData(dao.getList(Category.values()[category]));
+        this.view.setData(moviesDAO.getList(Category.values()[category]));
     }
 
     public MovieAdapter.OnMovieAdapterClickHandler getPosterClickHandler() {
@@ -111,13 +111,12 @@ public class MainListPresenter extends BasePresenter<MainListView> {
         }
     }
 
-    private class OnLoadingHandler implements NetworkUtils.OnLoadingHandler<List<Movie>> {
+    private class OnLoadingHandler implements Network.OnLoadingHandler<List<Movie>> {
         @Override
         public void onLoadingSuccess(List<Movie> data) {
             if (view != null) {
-                MoviesDAO dao = new MoviesDAOImpl(view.getContext());
-                dao.insert(data);
-                view.setData(dao.getList(Category.values()[category]));
+                moviesDAO.insert(data);
+                view.setData(moviesDAO.getList(Category.values()[category]));
                 setLoaded();
             }
         }
@@ -132,8 +131,7 @@ public class MainListPresenter extends BasePresenter<MainListView> {
         @Override
         public void onLoadingFailure(String errorMessage) {
             if (view != null) {
-                MoviesDAO dao = new MoviesDAOImpl(view.getContext());
-                List<Movie> movies = dao.getList(Category.values()[category]);
+                List<Movie> movies = moviesDAO.getList(Category.values()[category]);
                 view.setData(movies);
                 if (movies.size()== 20)
                     setLoaded();

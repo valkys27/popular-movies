@@ -2,11 +2,11 @@ package com.udacity.popularmovies.activities;
 
 import android.content.Context;
 import android.support.annotation.NonNull;
-import android.os.Bundle;
 import android.support.v7.widget.*;
 import android.view.*;
 import android.widget.*;
 
+import com.udacity.popularmovies.PopularMoviesApp;
 import com.udacity.popularmovies.adapters.MovieAdapter;
 import com.udacity.popularmovies.views.MainListView;
 import com.udacity.popularmovies.R;
@@ -37,6 +37,11 @@ public class MainListActivity extends BaseActivity<MainListView, MainListPresent
     @Override
     protected void setTitle() {
         setTitle(getString(R.string.app_name));
+    }
+
+    @Override
+    protected void injectPresenter() {
+        PopularMoviesApp.getAppComponent().injectMainListPresenter(getPresenter());
     }
 
     @Override

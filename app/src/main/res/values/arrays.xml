@@ -1,0 +1,7 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <array name="category_menu">
+        <item>Popular</item>
+        <item>TOP Rated</item>
+    </array>
+</resources>

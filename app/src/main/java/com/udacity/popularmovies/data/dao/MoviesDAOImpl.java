@@ -28,10 +28,13 @@ public class MoviesDAOImpl extends BaseDAO<Movie> implements MoviesDAO {
 
     @Override
     public List<Movie> getList(Category category) {
+        String selection = null;
         String orderBy = (category.equals(Category.POPULAR)) ?
                 MovieEntry.COLUMN_POPULARITY + " DESC" :
                 MovieEntry.COLUMN_VOTE_AVERAGE + " DESC";
-        return getList(null, null, orderBy);
+        if (category.equals(Category.FAVOURITE))
+            selection = MovieEntry.COLUMN_MARKED_AS_FAVOURITE + " = 1";
+        return getList(selection, null, orderBy);
     }
 
     @Override

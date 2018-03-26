@@ -1,16 +1,19 @@
 package com.udacity.popularmovies.pojo;
 
+import android.os.*;
+
 import com.google.gson.annotations.*;
 import com.udacity.popularmovies.data.PopularMoviesContract.MovieEntry;
 
 import org.chalup.microorm.annotations.Column;
 import org.threeten.bp.LocalDate;
+import org.threeten.bp.format.DateTimeFormatter;
 
 /**
  * Created by tomas on 26.02.2018.
  */
 
-public class Movie extends Pojo {
+public class Movie extends Pojo implements Parcelable {
 
     @Column(MovieEntry.COLUMN_TITLE)
     @Expose
@@ -60,6 +63,49 @@ public class Movie extends Pojo {
         this.voteAverage = voteAverage;
         this.popularity = popularity;
         this.posterPath = posterPath;
+    }
+
+    private Movie(Parcel in) {
+        super(in.readInt());
+        this._id = in.readInt();
+        this.title = in.readString();
+        this.releaseDate = LocalDate.parse(in.readString(), DateTimeFormatter.ISO_DATE);
+        this.runtime = in.readInt();
+        this.overview = in.readString();
+        this.markedAsFavourite = in.readInt() == 1;
+        this.voteAverage = in.readDouble();
+        this.popularity = in.readDouble();
+        this.posterPath = in.readString();
+    }
+
+    public static final Parcelable.Creator<Movie> CREATOR
+            = new Parcelable.Creator<Movie>() {
+        public Movie createFromParcel(Parcel in) {
+            return new Movie(in);
+        }
+
+        public Movie[] newArray(int size) {
+            return new Movie[size];
+        }
+    };
+
+    @Override
+    public int describeContents() {
+        return 0;
+    }
+
+    @Override
+    public void writeToParcel(Parcel dest, int flags) {
+        dest.writeInt(serverId);
+        dest.writeInt(_id);
+        dest.writeString(title);
+        dest.writeString(releaseDate.format(DateTimeFormatter.ISO_DATE));
+        dest.writeInt(runtime);
+        dest.writeString(overview);
+        dest.writeInt(markedAsFavourite ? 1 : 0);
+        dest.writeDouble(voteAverage);
+        dest.writeDouble(popularity);
+        dest.writeString(posterPath);
     }
 
     public String getTitle() {

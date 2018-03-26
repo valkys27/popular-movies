@@ -14,13 +14,9 @@ import com.udacity.popularmovies.views.DetailView;
 
 public class DetailPresenter extends BasePresenter<DetailView> {
 
-    static final String ID_KEY = "_id";
-    static final String SERVER_ID_KEY = "serverId";
-    private static final String LOADED_KEY = "loaded";
+    public static final String MOVIE_KEY = "movie";
 
-    private int _id;
-    private int serverId;
-    private boolean loaded = false;
+    private Movie movie;
 
     public DetailPresenter() {
         PopularMoviesApp.getAppComponent().injectDetailPresenter(this);
@@ -28,43 +24,53 @@ public class DetailPresenter extends BasePresenter<DetailView> {
 
     @Override
     public void writeToBundle(Bundle bundle) {
-        bundle.putBoolean(LOADED_KEY, loaded);
+        bundle.putParcelable(MOVIE_KEY, movie);
     }
 
     @Override
     public void readFromBundle(Bundle bundle) {
         if (bundle != null) {
-            _id = bundle.getInt(ID_KEY);
-            serverId = bundle.getInt(SERVER_ID_KEY);
-            loaded = bundle.getBoolean(LOADED_KEY, false);
+            movie = bundle.getParcelable(MOVIE_KEY);
         }
     }
 
     @Override
-    public void loadData() {
-        if (view != null && loaded)
-            this.view.setData(moviesDAO.findById(_id));
-        else
-            network.findMovieById(serverId, new OnLoadingHandler());
+    public void setData() {
+        if (view != null) {
+            if (movie.getRuntime() == 0)
+                network.findMovieById(movie.getServerId(), new OnLoadingHandler());
+            else
+                this.view.setData(movie);
+        }
+    }
+
+    public void setFavourite() {
+        movie.setMarkedAsFavourite(!movie.isMarkedAsFavourite());
+        if (view != null)
+            view.setFavourite(movie.isMarkedAsFavourite());
+        moviesDAO.update(movie);
+    }
+
+    public Movie getMovie() {
+        return movie;
     }
 
     private class OnLoadingHandler implements Network.OnLoadingHandler<Movie> {
         @Override
         public void onLoadingSuccess(Movie data) {
-            if (view != null) {
-                data.set_id(_id);
-                moviesDAO.update(data);
+            data.set_id(movie.get_id());
+            data.setMarkedAsFavourite(movie.isMarkedAsFavourite());
+            movie = data;
+            moviesDAO.update(data);
+            if (view != null)
                 view.setData(data);
-                loaded = true;
-            }
         }
 
         @Override
         public void onLoadingFailure(String errorMessage) {
             if (view != null) {
-                Movie movie = moviesDAO.findById(_id);
                 if (movie == null)
-                    loaded = false;
+                    view.showMessage("Server isn't available.");
                 else
                     view.setData(movie);
             }

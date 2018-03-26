@@ -3,5 +3,6 @@
     <array name="category_menu">
         <item>Popular</item>
         <item>TOP Rated</item>
+        <item>Favourite</item>
     </array>
 </resources>

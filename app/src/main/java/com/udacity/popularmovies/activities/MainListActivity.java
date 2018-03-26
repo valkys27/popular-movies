@@ -1,13 +1,14 @@
 package com.udacity.popularmovies.activities;
 
-import android.content.Context;
+import android.content.*;
 import android.support.annotation.NonNull;
 import android.support.v7.widget.*;
 import android.view.*;
 import android.widget.*;
 
-import com.udacity.popularmovies.PopularMoviesApp;
+import com.udacity.popularmovies.Category;
 import com.udacity.popularmovies.adapters.MovieAdapter;
+import com.udacity.popularmovies.presenters.DetailPresenter;
 import com.udacity.popularmovies.views.MainListView;
 import com.udacity.popularmovies.R;
 import com.udacity.popularmovies.pojo.Movie;
@@ -56,7 +57,16 @@ public class MainListActivity extends BaseActivity<MainListView, MainListPresent
     }
 
     @Override
-    public void setData(List<Movie> movies) {
+    public void setData(List<Movie> movies, Category category) {
+        mMovieAdapter.setCategory(category);
         mMovieAdapter.setData(movies);
+    }
+
+    @Override
+    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
+        super.onActivityResult(requestCode, resultCode, data);
+        int position = data.getIntExtra(MainListPresenter.POSITION_KEY, -1);
+        Movie item = data.getParcelableExtra(DetailPresenter.MOVIE_KEY);
+        mMovieAdapter.setItem(position, item);
     }
 }

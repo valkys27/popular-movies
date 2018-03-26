@@ -11,12 +11,12 @@ import org.chalup.microorm.annotations.Column;
 public abstract class Pojo {
 
     @Column("_id")
-    private int _id;
+    protected int _id;
 
     @Column("id")
     @Expose
     @SerializedName("id")
-    private int serverId;
+    protected int serverId;
 
     public Pojo(int serverId) {
         this.serverId = serverId;

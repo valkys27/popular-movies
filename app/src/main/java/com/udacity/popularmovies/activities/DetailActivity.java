@@ -5,14 +5,13 @@ import android.support.annotation.*;
 import android.view.MenuItem;
 import android.widget.*;
 
-import com.udacity.popularmovies.PopularMoviesApp;
 import com.udacity.popularmovies.R;
 import com.udacity.popularmovies.pojo.Movie;
 import com.udacity.popularmovies.presenters.*;
 import com.udacity.popularmovies.utils.PicassoUtils;
 import com.udacity.popularmovies.views.DetailView;
 
-import butterknife.BindView;
+import butterknife.*;
 
 public class DetailActivity extends BaseActivity<DetailView, DetailPresenter> implements DetailView {
 
@@ -22,11 +21,19 @@ public class DetailActivity extends BaseActivity<DetailView, DetailPresenter> im
     @BindView(R.id.voteAverage_tv) TextView voteAverage;
     @BindView(R.id.overview_tv) TextView overview;
     @BindView(R.id.detailPoster_iv) ImageView poster;
+    @BindView(R.id.markAsFavourite_ib) ImageButton markAsFavourite;
 
     @NonNull
     @Override
     public DetailPresenter createPresenter() {
         return new DetailPresenter();
+    }
+
+    @Override
+    public void onBackPressed() {
+        getIntent().putExtra(DetailPresenter.MOVIE_KEY, getPresenter().getMovie());
+        setResult(RESULT_OK, getIntent());
+        super.onBackPressed();
     }
 
     @Override
@@ -47,6 +54,20 @@ public class DetailActivity extends BaseActivity<DetailView, DetailPresenter> im
         return super.onOptionsItemSelected(item);
     }
 
+    @OnClick(R.id.markAsFavourite_ib)
+    public void onFavouriteButtonClick() {
+        getPresenter().setFavourite();
+    }
+
+    @Override
+    public void setFavourite(boolean marked) {
+        if (marked) {
+            markAsFavourite.setImageResource(R.drawable.ic_favorite);
+        } else {
+            markAsFavourite.setImageResource(R.drawable.ic_favorite_border);
+        }
+    }
+
     @Override
     protected int getLayoutId() {
         return R.layout.activity_detail;
@@ -59,6 +80,7 @@ public class DetailActivity extends BaseActivity<DetailView, DetailPresenter> im
 
     @Override
     public void setData(Movie movie) {
+        setFavourite(movie.isMarkedAsFavourite());
         title.setText(movie.getTitle());
         releaseDate.setText(Integer.toString(movie.getReleaseDate().getYear()));
         String runtime = (movie.getRuntime() == 0) ? "N/A" : movie.getRuntime() + "min";
@@ -67,6 +89,5 @@ public class DetailActivity extends BaseActivity<DetailView, DetailPresenter> im
         overview.setText(movie.getOverview());
         String path = "w154" + movie.getPosterPath();
         PicassoUtils.loadImage(this, path, poster);
-
     }
 }

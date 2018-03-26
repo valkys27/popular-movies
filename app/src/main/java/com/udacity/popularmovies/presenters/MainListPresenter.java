@@ -1,5 +1,6 @@
 package com.udacity.popularmovies.presenters;
 
+import android.app.Activity;
 import android.content.*;
 import android.os.Bundle;
 import android.support.v7.widget.*;
@@ -16,7 +17,7 @@ import com.udacity.popularmovies.network.Network;
 import com.udacity.popularmovies.pojo.Movie;
 import com.udacity.popularmovies.views.MainListView;
 
-import java.util.List;
+import java.util.*;
 
 /**
  * Created by tomas on 28.02.2018.
@@ -24,13 +25,18 @@ import java.util.List;
 
 public class MainListPresenter extends BasePresenter<MainListView> {
 
-    private static final String CATEGORY_KEY = "category";
-    private static final String LOADED_POPULAR_KEY = "loaded_popular";
-    private static final String LOADED_TOP_RATED_KEY = "loaded_top_rated";
+    public static final String POSITION_KEY = "position";
 
-    private boolean loadedPopular = false;
-    private boolean loadedTopRated = false;
-    private int category = 0;
+    private static final int REQUEST_CODE = 100;
+    private static final String CATEGORY_KEY = "category";
+    private static final String MOVIE_LIST_KEY = "movieList";
+    private static final String POPULAR_LOADED_KEY = "popularLoaded";
+    private static final String TOP_RATED_LOADED_KEY = "topRatedLoaded";
+
+    private List<Movie> movieList = null;
+    private Category category = Category.POPULAR;
+    private boolean popularLoaded = false;
+    private boolean topRatedLoaded = false;
     private AdapterView.OnItemSelectedListener onCategorySelectedListener;
 
     public MainListPresenter() {
@@ -48,7 +54,7 @@ public class MainListPresenter extends BasePresenter<MainListView> {
 
     public void setCategorySpinner(Spinner spinner, Context actionBarContext) {
         spinner.setAdapter(getSpinnerAdapter(actionBarContext));
-        spinner.setSelection(category);
+        spinner.setSelection(category.ordinal());
         spinner.setOnItemSelectedListener(onCategorySelectedListener);
     }
 
@@ -58,32 +64,38 @@ public class MainListPresenter extends BasePresenter<MainListView> {
     }
 
     public void writeToBundle(Bundle bundle) {
-        bundle.putInt(CATEGORY_KEY, category);
-        bundle.putBoolean(LOADED_POPULAR_KEY, loadedPopular);
-        bundle.putBoolean(LOADED_TOP_RATED_KEY, loadedTopRated);
+        bundle.putInt(CATEGORY_KEY, category.ordinal());
+        bundle.putBoolean(POPULAR_LOADED_KEY, popularLoaded);
+        bundle.putBoolean(TOP_RATED_LOADED_KEY, topRatedLoaded);
+        bundle.putParcelableArrayList(MOVIE_LIST_KEY, (ArrayList<Movie>) movieList);
     }
 
     public void readFromBundle(Bundle bundle) {
         if (bundle != null) {
-            category = bundle.getInt(CATEGORY_KEY, 0);
-            loadedPopular = bundle.getBoolean(LOADED_POPULAR_KEY, false);
-            loadedTopRated = bundle.getBoolean(LOADED_TOP_RATED_KEY, false);
+            int categoryOrdinal = bundle.getInt(CATEGORY_KEY, 0);
+            category = Category.values()[categoryOrdinal];
+            popularLoaded = bundle.getBoolean(POPULAR_LOADED_KEY);
+            topRatedLoaded = bundle.getBoolean(TOP_RATED_LOADED_KEY);
+            movieList = bundle.getParcelableArrayList(MOVIE_LIST_KEY);
         }
     }
 
-    public void loadData() {
-        if (view != null && isLoaded())
-            loadMovies();
+    @Override
+    public void setData() {
+        if (isLoaded()) {
+            movieList = moviesDAO.getList(category);
+            if (view != null)
+                view.setData(movieList, category);
+        }
         else
-            network.getMovieListBy(Category.values()[category], new OnLoadingHandler());
+            network.getMovieListBy(category, new OnLoadingHandler());
     }
 
     private boolean isLoaded() {
-        return (category == 0 && loadedPopular) || (category == 1 && loadedTopRated);
-    }
-
-    private void loadMovies() {
-        this.view.setData(moviesDAO.getList(Category.values()[category]));
+        return movieList != null && movieList.size() > 0 && (
+                        (popularLoaded && category.equals(Category.POPULAR)) ||
+                        (topRatedLoaded && category.equals(Category.TOP_RATED))
+                || category.equals(Category.FAVOURITE));
     }
 
     public MovieAdapter.OnMovieAdapterClickHandler getPosterClickHandler() {
@@ -93,8 +105,10 @@ public class MainListPresenter extends BasePresenter<MainListView> {
     private class OnCategorySelectedListener implements AdapterView.OnItemSelectedListener {
         @Override
         public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
-            category = position;
-            loadData();
+            if (movieList != null) {
+                category = Category.values()[position];
+                setData();
+            }
         }
         @Override
         public void onNothingSelected(AdapterView<?> parent) {}
@@ -102,11 +116,11 @@ public class MainListPresenter extends BasePresenter<MainListView> {
 
     private class OnPosterClickHandler implements MovieAdapter.OnMovieAdapterClickHandler {
         @Override
-        public void onPosterClick(int _id, int serverId) {
+        public void onPosterClick(int position, Movie movie) {
             Intent intent = new Intent(view.getContext(), DetailActivity.class);
-            intent.putExtra(DetailPresenter.ID_KEY, _id);
-            intent.putExtra(DetailPresenter.SERVER_ID_KEY, serverId);
-            view.getContext().startActivity(intent);
+            intent.putExtra(DetailPresenter.MOVIE_KEY, movie);
+            intent.putExtra(POSITION_KEY, position);
+            ((Activity)view.getContext()).startActivityForResult(intent, REQUEST_CODE);
         }
     }
 
@@ -115,25 +129,20 @@ public class MainListPresenter extends BasePresenter<MainListView> {
         public void onLoadingSuccess(List<Movie> data) {
             if (view != null) {
                 moviesDAO.insert(data);
-                view.setData(moviesDAO.getList(Category.values()[category]));
-                setLoaded();
+                movieList = moviesDAO.getList(category);
+                view.setData(movieList, category);
+                if (category.equals(Category.POPULAR))
+                    popularLoaded = true;
+                else if (category.equals(Category.TOP_RATED))
+                    topRatedLoaded = true;
             }
-        }
-
-        private void setLoaded() {
-            if (category == 0)
-                loadedPopular = true;
-            else if (category == 1)
-                loadedTopRated = true;
         }
 
         @Override
         public void onLoadingFailure(String errorMessage) {
             if (view != null) {
-                List<Movie> movies = moviesDAO.getList(Category.values()[category]);
-                view.setData(movies);
-                if (movies.size()== 20)
-                    setLoaded();
+                List<Movie> movies = moviesDAO.getList(category);
+                view.setData(movies, category);
             }
             Log.e("Retrofit", "Loading error");
         }

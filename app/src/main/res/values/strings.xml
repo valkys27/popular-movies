@@ -2,5 +2,4 @@
     <string name="app_name">Popular Movies</string>
     <string name="detail_activity_title">Movie Detail</string>
     <string name="poster_content_description">Movie Poster</string>
-    <string name="favourite_button_caption">Mark as favourite</string>
 </resources>

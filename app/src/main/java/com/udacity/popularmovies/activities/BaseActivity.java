@@ -29,7 +29,7 @@ public abstract class BaseActivity<V extends MvpView, P extends BasePresenter<V>
         setTitle();
         getPresenter().readFromBundle(savedInstanceState);
         init();
-        getPresenter().loadData();
+        getPresenter().setData();
     }
 
     protected void init() {}

@@ -7,6 +7,7 @@ import android.support.v7.widget.RecyclerView;
 import android.view.*;
 import android.widget.*;
 
+import com.udacity.popularmovies.Category;
 import com.udacity.popularmovies.R;
 import com.udacity.popularmovies.pojo.Movie;
 import com.udacity.popularmovies.utils.PicassoUtils;
@@ -25,21 +26,34 @@ public class MovieAdapter extends RecyclerView.Adapter<MovieAdapter.MovieAdapter
     private final OnMovieAdapterClickHandler mClickHandler;
     private final Context mContext;
 
-    private List<Movie> movies;
+    private List<Movie> mData;
+    private Category mCategory;
 
     public interface OnMovieAdapterClickHandler {
-        void onPosterClick(int _id, int serverId);
+        void onPosterClick(int position, Movie movie);
     }
 
     public MovieAdapter(@NonNull Context context, OnMovieAdapterClickHandler clickHandler) {
         mContext = context;
         mClickHandler = clickHandler;
-        movies = new ArrayList<>();
+        mData = new ArrayList<>();
     }
 
-    public void setData(List<Movie> movies) {
-        this.movies = new ArrayList<>(movies);
+    public void setData(List<Movie> data) {
+        mData = new ArrayList<>(data);
         notifyDataSetChanged();
+    }
+
+    public void setItem(int position, Movie item) {
+        if (!item.isMarkedAsFavourite() && mCategory != null && mCategory.equals(Category.FAVOURITE))
+            mData.remove(position);
+        else
+            mData.set(position, item);
+        notifyDataSetChanged();
+    }
+
+    public void setCategory(Category category) {
+        mCategory = category;
     }
 
     @NonNull
@@ -52,7 +66,7 @@ public class MovieAdapter extends RecyclerView.Adapter<MovieAdapter.MovieAdapter
 
     @Override
     public void onBindViewHolder(final MovieAdapterViewHolder holder, final int position) {
-        final Movie movie = movies.get(position);
+        final Movie movie = mData.get(position);
         holder.poster.setTag(movie);
         Display display = ((WindowManager)mContext.getSystemService(Context.WINDOW_SERVICE)).getDefaultDisplay();
         Point size = new Point();
@@ -66,7 +80,7 @@ public class MovieAdapter extends RecyclerView.Adapter<MovieAdapter.MovieAdapter
 
     @Override
     public int getItemCount() {
-        return movies.size();
+        return mData.size();
     }
 
     class MovieAdapterViewHolder extends RecyclerView.ViewHolder implements View.OnClickListener {
@@ -81,7 +95,7 @@ public class MovieAdapter extends RecyclerView.Adapter<MovieAdapter.MovieAdapter
         @Override
         public void onClick(View v) {
             Movie movie = (Movie) v.getTag();
-            mClickHandler.onPosterClick(movie.get_id(), movie.getServerId());
+            mClickHandler.onPosterClick(getAdapterPosition(), movie);
         }
 
         public void onBindViewHolder(final String url, final int width, final int height) {

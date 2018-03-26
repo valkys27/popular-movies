@@ -24,7 +24,7 @@ public abstract class BasePresenter<V extends MvpView> extends MvpBasePresenter<
 
     public abstract void writeToBundle(Bundle bundle);
     public abstract void readFromBundle(Bundle bundle);
-    public abstract void loadData();
+    public abstract void setData();
 
     @Override
     public void attachView(V view) {

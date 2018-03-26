@@ -8,4 +8,5 @@ import com.udacity.popularmovies.pojo.Movie;
 
 public interface DetailView extends BaseView {
     void setData(Movie movie);
+    void setFavourite(boolean marked);
 }

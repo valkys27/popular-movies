@@ -5,6 +5,7 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    android:background="@android:color/background_light"
     tools:context="com.udacity.popularmovies.activities.DetailActivity">
     <android.support.constraint.ConstraintLayout
         android:layout_width="match_parent"
@@ -78,14 +79,13 @@
             app:layout_constraintStart_toEndOf="@+id/detailPoster_iv"
             app:layout_constraintTop_toBottomOf="@+id/runtime_tv" />
 
-        <Button
-            android:id="@+id/button"
-            android:layout_width="@dimen/favourite_button_width"
+        <ImageButton
+            android:id="@+id/markAsFavourite_ib"
+            android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginStart="@dimen/margin_large"
             android:layout_marginTop="@dimen/margin_small"
-            android:background="@color/colorAccentLight"
-            android:text="@string/favourite_button_caption"
+            android:background="@android:color/background_light"
             app:layout_constraintStart_toEndOf="@+id/detailPoster_iv"
             app:layout_constraintTop_toBottomOf="@+id/voteAverage_tv" />
 

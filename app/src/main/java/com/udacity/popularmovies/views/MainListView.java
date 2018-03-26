@@ -1,5 +1,6 @@
 package com.udacity.popularmovies.views;
 
+import com.udacity.popularmovies.Category;
 import com.udacity.popularmovies.pojo.Movie;
 
 import java.util.List;
@@ -10,5 +11,5 @@ import java.util.List;
 
 public interface MainListView extends BaseView {
 
-    void setData(List<Movie> movies);
+    void setData(List<Movie> movies, Category category);
 }

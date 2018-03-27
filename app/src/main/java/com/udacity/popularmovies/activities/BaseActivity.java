@@ -38,6 +38,7 @@ public abstract class BaseActivity<V extends MvpView, P extends BasePresenter<V>
     protected void onSaveInstanceState(Bundle outState) {
         super.onSaveInstanceState(outState);
         getPresenter().writeToBundle(outState);
+        return;
     }
 
     public Context getContext() {

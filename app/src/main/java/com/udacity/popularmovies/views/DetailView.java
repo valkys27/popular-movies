@@ -1,12 +1,14 @@
 package com.udacity.popularmovies.views;
 
-import com.udacity.popularmovies.pojo.Movie;
+import android.support.design.widget.BottomNavigationView;
+
+import com.udacity.popularmovies.fragments.DetailInfoFragment;
 
 /**
  * Created by tomas on 05.03.2018.
  */
 
-public interface DetailView extends BaseView {
-    void setData(Movie movie);
-    void setFavourite(boolean marked);
+public interface DetailView extends BaseView, DetailInfoFragment.OnDetailInfoFragmentListener,
+        BottomNavigationView.OnNavigationItemSelectedListener {
+    void setData(int menuItemId);
 }

@@ -10,6 +10,5 @@ import java.util.List;
  */
 
 public interface MainListView extends BaseView {
-
     void setData(List<Movie> movies, Category category);
 }

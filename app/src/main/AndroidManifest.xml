@@ -12,10 +12,12 @@
         android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
         android:theme="@style/AppTheme">
-        <activity android:name=".activities.MainListActivity"
+        <activity
+            android:name=".activities.MainListActivity"
             android:launchMode="singleTop">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
+
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
@@ -25,8 +27,9 @@
             android:authorities="com.udacity.popularmovies"
             android:exported="false" />
 
-        <activity android:name=".activities.DetailActivity"
-            android:parentActivityName=".activities.MainListActivity"></activity>
+        <activity
+            android:name=".activities.DetailActivity"
+            android:parentActivityName=".activities.MainListActivity" />
     </application>
 
 </manifest>

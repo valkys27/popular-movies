@@ -2,4 +2,8 @@
     <string name="app_name">Popular Movies</string>
     <string name="detail_activity_title">Movie Detail</string>
     <string name="poster_content_description">Movie Poster</string>
+    <string name="favourite_button_description">Favourite Button</string>
+    <string name="title_info">Info</string>
+    <string name="title_trailers">Trailers</string>
+    <string name="title_reviews">Reviews</string>
 </resources>

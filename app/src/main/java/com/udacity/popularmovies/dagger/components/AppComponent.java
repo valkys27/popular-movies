@@ -15,5 +15,6 @@ import dagger.Component;
 public interface AppComponent {
     void injectMainListPresenter(MainListPresenter presenter);
     void injectDetailPresenter(DetailPresenter presenter);
+    void injectDetailInfoPresenter(DetailInfoPresenter presenter);
     void injectContentProvider(BaseContentProvider contentProvider);
 }

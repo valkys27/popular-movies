@@ -1,0 +1,88 @@
+<?xml version="1.0" encoding="utf-8"?>
+<android.support.constraint.ConstraintLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content">
+
+    <android.support.constraint.ConstraintLayout
+        android:id="@+id/title_background_cl"
+        android:layout_width="match_parent"
+        android:layout_height="@dimen/detail_activity_title_background_height"
+        android:background="@color/colorAccent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent">
+
+        <TextView
+            android:id="@+id/title_tv"
+            style="@style/DetailTitleTextView"
+            tools:text="Chappie"/>
+    </android.support.constraint.ConstraintLayout>
+
+    <ImageView
+        android:id="@+id/detailPoster_iv"
+        style="@style/DetailPosterImageView"
+        android:layout_marginBottom="@dimen/margin_small"
+        app:layout_constraintBottom_toBottomOf="parent"/>
+
+    <LinearLayout
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:id="@+id/detail_info_ll"
+        android:orientation="horizontal"
+        app:layout_constraintWidth_default="spread"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toEndOf="@+id/detailPoster_iv"
+        app:layout_constraintTop_toBottomOf="@+id/title_background_cl">
+
+        <TextView
+            android:id="@+id/releaseDate_tv"
+            android:layout_width="0dp"
+            android:layout_weight="1"
+            style="@style/DetailInfoTextView"
+            tools:text="2015" />
+
+        <TextView
+            android:id="@+id/runtime_tv"
+            android:layout_width="0dp"
+            android:layout_weight="1"
+            style="@style/DetailInfoTextView"
+            android:textStyle="italic"
+            tools:text="120min" />
+
+        <TextView
+            android:id="@+id/voteAverage_tv"
+            android:layout_width="0dp"
+            android:layout_weight="1"
+            style="@style/DetailInfoTextView"
+            android:textStyle="bold"
+            tools:text="8.1/10" />
+
+        <ImageButton
+            android:id="@+id/markAsFavourite_ib"
+            android:layout_height="wrap_content"
+            android:layout_width="0dp"
+            android:layout_weight="1"
+            android:layout_marginStart="@dimen/margin_large"
+            android:layout_marginTop="@dimen/margin_small"
+            android:background="@android:color/background_light"/>
+
+    </LinearLayout>
+
+    <TextView
+        android:id="@+id/overview_tv"
+        android:layout_width="0dp"
+        android:layout_weight="1"
+        android:layout_height="wrap_content"
+        android:layout_marginEnd="@dimen/margin_medium"
+        android:layout_marginStart="@dimen/margin_large"
+        app:layout_constraintStart_toEndOf="@+id/detailPoster_iv"
+        app:layout_constraintTop_toBottomOf="@id/detail_info_ll"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintWidth_default="wrap"
+        tools:text="Every child comes into world full of promise, and none more so than Chappie: he is gifted, special, a prodigy. Chappie he is a robot."
+        />
+
+</android.support.constraint.ConstraintLayout>

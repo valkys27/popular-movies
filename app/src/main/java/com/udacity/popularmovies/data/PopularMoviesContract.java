@@ -9,15 +9,14 @@ import android.provider.BaseColumns;
 
 public class PopularMoviesContract {
 
-    public static final String CONTENT_AUTHORITY = "com.udacity.popularmovies";
-    public static final Uri BASE_CONTENT_URI = Uri.parse("content://" + CONTENT_AUTHORITY);
-    public static final String PATH_MOVIE = "movie";
-    public static final String PATH_REVIEW = "review";
-    public static final String PATH_TRAILER = "trailer";
+    private static final String BASE_CONTENT_AUTHORITY = "com.udacity.popularmovies";
+    private static final String SCHEME = "content";
 
     public static final class MovieEntry implements BaseColumns {
-        public static final Uri CONTENT_URI = BASE_CONTENT_URI.buildUpon()
-                .appendPath(PATH_MOVIE)
+        public static final String CONTENT_AUTHORITY = BASE_CONTENT_AUTHORITY + ".movieprovider";
+        public static final String PATH = "movie";
+        public static final Uri CONTENT_URI = Uri.parse(SCHEME + "://" + CONTENT_AUTHORITY).buildUpon()
+                .appendPath(PATH)
                 .build();
 
         public static final String TABLE_NAME = "movies";
@@ -40,8 +39,10 @@ public class PopularMoviesContract {
     }
 
     public static final class ReviewEntry implements BaseColumns {
-        public static final Uri CONTENT_URI = BASE_CONTENT_URI.buildUpon()
-                .appendPath(PATH_REVIEW)
+        public static final String CONTENT_AUTHORITY = BASE_CONTENT_AUTHORITY + ".reviewprovider";
+        public static final String PATH = "review";
+        public static final Uri CONTENT_URI = Uri.parse(SCHEME + "://" + CONTENT_AUTHORITY).buildUpon()
+                .appendPath(PATH)
                 .build();
 
         public static final String TABLE_NAME = "reviews";
@@ -63,14 +64,17 @@ public class PopularMoviesContract {
     }
 
     public static final class TrailerEntry implements BaseColumns {
-        public static final Uri CONTENT_URI = BASE_CONTENT_URI.buildUpon()
-                .appendPath(PATH_TRAILER)
+        public static final String CONTENT_AUTHORITY = BASE_CONTENT_AUTHORITY + ".trailerprovider";
+        public static final String PATH = "trailer";
+        public static final Uri CONTENT_URI = Uri.parse(SCHEME + "://" + CONTENT_AUTHORITY).buildUpon()
+                .appendPath(PATH)
                 .build();
 
         public static final String TABLE_NAME = "trailers";
 
         public static final String COLUMN_TRAILER_ID = "id";
         public static final String COLUMN_MOVIE_ID = "movie_id";
+        public static final String COLUMN_NAME = "name";
         public static final String COLUMN_KEY = "key";
 
         public static Uri buildTrailerUriWithMovieId(int movieId) {

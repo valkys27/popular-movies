@@ -3,9 +3,11 @@ package com.udacity.popularmovies.dagger.modules;
 import com.google.gson.*;
 import com.google.gson.reflect.TypeToken;
 import com.udacity.popularmovies.dagger.scope.PerApplication;
-import com.udacity.popularmovies.network.TheMovieDbService;
+import com.udacity.popularmovies.network.*;
 import com.udacity.popularmovies.pojo.Movie;
 
+import com.udacity.popularmovies.pojo.Review;
+import com.udacity.popularmovies.pojo.Trailer;
 import org.threeten.bp.LocalDate;
 
 import java.lang.reflect.Type;
@@ -23,20 +25,12 @@ import retrofit2.converter.gson.GsonConverterFactory;
 @Module
 public class NetworkModule {
 
-    private static final int MOVIE_COUNT = 20;
-    private static final String JSON_ARRAY_NAME = "results";
     private static final String BASE_URL = "https://api.themoviedb.org/";
 
     @Provides
     @PerApplication
-    public JsonDeserializer<LocalDate> providesLocalDateAdapter() {
-        return new JsonDeserializer<LocalDate>() {
-            @Override
-            public LocalDate deserialize(JsonElement json, Type typeOfT, JsonDeserializationContext context) throws JsonParseException {
-                String date = json.getAsString();
-                return LocalDate.parse(date);
-            }
-        };
+    public JsonDeserializer<LocalDate> providesLocalDateJsonDeserializer() {
+        return new JsonDeserializers.LocalDateDeserializer();
     }
 
     @Provides @PerApplication
@@ -51,22 +45,27 @@ public class NetworkModule {
     }
 
     @Provides @PerApplication
-    public Gson providesGson(GsonBuilder baseGsonBuilder) {
-        final Gson baseGson = baseGsonBuilder.create();
+    public JsonDeserializer<List<Movie>> providesMovieListJsonDeserializer() {
+        return new JsonDeserializers.MovieListJsonDeserializer();
+    }
+
+    @Provides @PerApplication
+    public JsonDeserializer<List<Trailer>> providesTrailerListJsonDeserializer() {
+        return new JsonDeserializers.TrailerListJsonDeserializer();
+    }
+
+    @Provides @PerApplication
+    public JsonDeserializer<List<Review>> providesReviewListJsonDeserializer() {
+        return new JsonDeserializers.ReviewListJsonDeserializer();
+    }
+
+    @Provides @PerApplication
+    public Gson providesGson(GsonBuilder baseGsonBuilder, JsonDeserializer<List<Movie>> movieListDeserializer,
+                             JsonDeserializer<List<Trailer>> trailerListDeserializer, JsonDeserializer<List<Review>> reviewListDeserializer) {
         return baseGsonBuilder
-                .registerTypeAdapter(new TypeToken<List<Movie>>() {
-                }.getType(), new JsonDeserializer<List<Movie>>() {
-                    @Override
-                    public List<Movie> deserialize(JsonElement json, Type typeOfT, JsonDeserializationContext context) throws JsonParseException {
-                        JsonArray array = json.getAsJsonObject().get(JSON_ARRAY_NAME).getAsJsonArray();
-                        List<Movie> movies = new ArrayList<>();
-                        for (int i = 0; i < MOVIE_COUNT; i++) {
-                            JsonObject object = array.get(i).getAsJsonObject();
-                            movies.add(baseGson.fromJson(object, Movie.class));
-                        }
-                        return movies;
-                    }
-                })
+                .registerTypeAdapter(new TypeToken<List<Movie>>() {}.getType(), movieListDeserializer)
+                .registerTypeAdapter(new TypeToken<List<Trailer>>() {}.getType(), trailerListDeserializer)
+                .registerTypeAdapter(new TypeToken<List<Review>>() {}.getType(), reviewListDeserializer)
                 .create();
     }
 

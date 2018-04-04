@@ -40,6 +40,18 @@ public class DbModule {
 
     @Provides
     @PerApplication
+    public TrailersDAO providesTrailersDAO(Context context, MicroOrm microOrm) {
+        return new TrailersDAOImpl(context, microOrm);
+    }
+
+    @Provides
+    @PerApplication
+    public ReviewsDAO providesReviewsDAO(Context context, MicroOrm microOrm) {
+        return new ReviewsDAOImpl(context, microOrm);
+    }
+
+    @Provides
+    @PerApplication
     public DbProvider providesDbHelper(Context context, SqlParser sqlParser) {
         return new DbHelper(context, sqlParser);
     }

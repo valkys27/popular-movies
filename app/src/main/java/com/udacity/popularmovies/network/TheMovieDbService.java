@@ -17,11 +17,11 @@ public interface TheMovieDbService {
     Call<List<Movie>> getMovieList(@Path("category") String category, @Query("api_key") String key);
 
     @GET("/3/movie/{id}")
-    Call<Movie> findMovieById(@Path("id") int id, @Query("api_key") String key);
+    Call<Movie> findMovieById(@Path("id") String id, @Query("api_key") String key);
 
     @GET("/3/movie/{movie_id}/videos")
-    Call<List<Trailer>> getTrailerList(@Path("movie_id") int id, @Query("api_key") String key);
+    Call<List<Trailer>> getTrailerList(@Path("movie_id") String movie_id, @Query("api_key") String key);
 
     @GET("/3/movie/{movie_id}/reviews")
-    Call<List<Review>> getReviewList(@Path("movie_id") int id, @Query("api_key") String key);
+    Call<List<Review>> getReviewList(@Path("movie_id") String movie_id, @Query("api_key") String key);
 }

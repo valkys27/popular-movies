@@ -5,7 +5,6 @@ import android.database.Cursor;
 import android.net.Uri;
 import android.support.annotation.*;
 
-import com.udacity.popularmovies.data.PopularMoviesContract;
 import com.udacity.popularmovies.data.PopularMoviesContract.MovieEntry;
 
 /**
@@ -14,13 +13,13 @@ import com.udacity.popularmovies.data.PopularMoviesContract.MovieEntry;
 
 public class MoviesContentProvider extends BaseContentProvider {
 
-    public static final int CODE_MOVIES = 100;
-    public static final int CODE_MOVIES_WITH_ID = 101;
+    private static final int CODE_MOVIES = 100;
+    private static final int CODE_MOVIES_WITH_ID = 101;
 
     @Override
     protected void setURIs(UriMatcher uriMatcher) {
-        uriMatcher.addURI(getAuthority(), PopularMoviesContract.PATH_MOVIE, CODE_MOVIES);
-        uriMatcher.addURI(getAuthority(), PopularMoviesContract.PATH_MOVIE + "/#", CODE_MOVIES_WITH_ID);
+        uriMatcher.addURI(MovieEntry.CONTENT_AUTHORITY, MovieEntry.PATH, CODE_MOVIES);
+        uriMatcher.addURI(MovieEntry.CONTENT_AUTHORITY, MovieEntry.PATH + "/#", CODE_MOVIES_WITH_ID);
     }
 
     @Override

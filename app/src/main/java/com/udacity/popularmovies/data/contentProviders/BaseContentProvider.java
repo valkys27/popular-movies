@@ -17,7 +17,7 @@ import javax.inject.Inject;
 
 public abstract class BaseContentProvider extends ContentProvider {
 
-    protected UriMatcher mUriMatcher;
+    UriMatcher mUriMatcher;
 
     @Inject
     DbProvider mDbProvider;
@@ -25,14 +25,10 @@ public abstract class BaseContentProvider extends ContentProvider {
     abstract protected void setURIs(UriMatcher uriMatcher);
     abstract protected String getTableName();
 
-    public UriMatcher buildUriMatcher() {
+    private UriMatcher buildUriMatcher() {
         final UriMatcher uriMatcher = new UriMatcher(UriMatcher.NO_MATCH);
         setURIs(uriMatcher);
         return uriMatcher;
-    }
-
-    protected String getAuthority() {
-        return PopularMoviesContract.CONTENT_AUTHORITY;
     }
 
     @Override
@@ -59,7 +55,7 @@ public abstract class BaseContentProvider extends ContentProvider {
         throw new UnsupportedOperationException("Not implemented.");
     }
 
-    protected Cursor queryWithId(@NonNull Uri uri, @Nullable String[] projection, @Nullable String sortOrder) {
+    Cursor queryWithId(@NonNull Uri uri, @Nullable String[] projection, @Nullable String sortOrder) {
         int id = Integer.parseInt(uri.getLastPathSegment());
         String[] selectionArguments = new String[]{Integer.toString(id)};
         return mDbProvider.getReadableDatabase().query(
@@ -72,7 +68,7 @@ public abstract class BaseContentProvider extends ContentProvider {
                 sortOrder);
     }
 
-    protected Cursor query(@Nullable String[] projection, @Nullable String selection, @Nullable String[] selectionArgs, @Nullable String sortOrder) {
+    Cursor query(@Nullable String[] projection, @Nullable String selection, @Nullable String[] selectionArgs, @Nullable String sortOrder) {
         return mDbProvider.getReadableDatabase().query(
                 getTableName(),
                 projection,
@@ -84,7 +80,7 @@ public abstract class BaseContentProvider extends ContentProvider {
                 "20");
     }
 
-    protected int bulkInsertWithCorrectUri(@NonNull Uri uri, @NonNull ContentValues[] values) {
+    int bulkInsertWithCorrectUri(@NonNull Uri uri, @NonNull ContentValues[] values) {
         final SQLiteDatabase db = mDbProvider.getWritableDatabase();
         db.beginTransaction();
         int rowsInserted = 0;

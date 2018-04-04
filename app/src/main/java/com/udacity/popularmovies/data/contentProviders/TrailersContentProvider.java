@@ -5,7 +5,6 @@ import android.database.Cursor;
 import android.net.Uri;
 import android.support.annotation.*;
 
-import com.udacity.popularmovies.data.PopularMoviesContract;
 import com.udacity.popularmovies.data.PopularMoviesContract.TrailerEntry;
 
 /**
@@ -14,13 +13,13 @@ import com.udacity.popularmovies.data.PopularMoviesContract.TrailerEntry;
 
 public class TrailersContentProvider extends BaseContentProvider {
 
-    public static final int CODE_TRAILERS = 300;
-    public static final int CODE_TRAILERS_WITH_ID = 301;
+    private static final int CODE_TRAILERS = 300;
+    private static final int CODE_TRAILERS_WITH_ID = 301;
 
     @Override
     protected void setURIs(UriMatcher uriMatcher) {
-        uriMatcher.addURI(getAuthority(), PopularMoviesContract.PATH_TRAILER, CODE_TRAILERS);
-        uriMatcher.addURI(getAuthority(), PopularMoviesContract.PATH_TRAILER + "/#", CODE_TRAILERS_WITH_ID);
+        uriMatcher.addURI(TrailerEntry.CONTENT_AUTHORITY, TrailerEntry.PATH, CODE_TRAILERS);
+        uriMatcher.addURI(TrailerEntry.CONTENT_AUTHORITY, TrailerEntry.PATH + "/#", CODE_TRAILERS_WITH_ID);
     }
 
     @Override

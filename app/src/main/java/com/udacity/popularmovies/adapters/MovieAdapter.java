@@ -22,7 +22,7 @@ import butterknife.*;
 
 public class MovieAdapter extends RecyclerView.Adapter<MovieAdapter.MovieAdapterViewHolder> {
 
-    private static final int ITEM_LAYOUT_ID = com.udacity.popularmovies.R.layout.list_movie_item;
+    private static final int ITEM_LAYOUT_ID = R.layout.list_movie_item;
     private final OnMovieAdapterClickHandler mClickHandler;
     private final Context mContext;
 
@@ -65,13 +65,13 @@ public class MovieAdapter extends RecyclerView.Adapter<MovieAdapter.MovieAdapter
     }
 
     @Override
-    public void onBindViewHolder(final MovieAdapterViewHolder holder, final int position) {
+    public void onBindViewHolder(@NonNull final MovieAdapterViewHolder holder, final int position) {
         final Movie movie = mData.get(position);
         holder.poster.setTag(movie);
         Display display = ((WindowManager)mContext.getSystemService(Context.WINDOW_SERVICE)).getDefaultDisplay();
         Point size = new Point();
         display.getSize(size);
-        int width = size.x/ 2;
+        int width = size.x / 2;
         int height = (int) (width * 1.5);
         int sourceWidth = (width <= 185) ? 185 : (width <= 342) ? 342 : 500;
         String url = String.format("w%d" + movie.getPosterPath(), sourceWidth);
@@ -86,7 +86,7 @@ public class MovieAdapter extends RecyclerView.Adapter<MovieAdapter.MovieAdapter
     class MovieAdapterViewHolder extends RecyclerView.ViewHolder implements View.OnClickListener {
         @BindView(R.id.poster_ib) ImageButton poster;
 
-        public MovieAdapterViewHolder(View itemView) {
+        MovieAdapterViewHolder(View itemView) {
             super(itemView);
             ButterKnife.bind(this, itemView);
             poster.setOnClickListener(this);
@@ -98,7 +98,7 @@ public class MovieAdapter extends RecyclerView.Adapter<MovieAdapter.MovieAdapter
             mClickHandler.onPosterClick(getAdapterPosition(), movie);
         }
 
-        public void onBindViewHolder(final String url, final int width, final int height) {
+        void onBindViewHolder(final String url, final int width, final int height) {
             FrameLayout.LayoutParams params = new FrameLayout.LayoutParams(width, height);
             params.setMargins(0,0, 0, 0);
             itemView.setLayoutParams(params);

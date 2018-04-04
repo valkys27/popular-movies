@@ -1,5 +1,7 @@
 package com.udacity.popularmovies.pojo;
 
+import android.os.Parcel;
+import android.os.Parcelable;
 import com.google.gson.annotations.*;
 
 import org.chalup.microorm.annotations.Column;
@@ -8,18 +10,34 @@ import org.chalup.microorm.annotations.Column;
  * Created by tomas on 01.03.2018.
  */
 
-public abstract class Pojo {
+public abstract class Pojo implements Parcelable {
 
     @Column("_id")
-    protected int _id;
+    private int _id;
 
     @Column("id")
     @Expose
     @SerializedName("id")
-    protected int serverId;
+    private String serverId;
 
-    public Pojo(int serverId) {
+    Pojo(String serverId) {
         this.serverId = serverId;
+    }
+
+    Pojo(Parcel in) {
+        this._id = in.readInt();
+        this.serverId = in.readString();
+    }
+
+    @Override
+    public int describeContents() {
+        return 0;
+    }
+
+    @Override
+    public void writeToParcel(Parcel dest, int flags) {
+        dest.writeInt(_id);
+        dest.writeString(serverId);
     }
 
     public int get_id() {
@@ -30,11 +48,11 @@ public abstract class Pojo {
         this._id = _id;
     }
 
-    public int getServerId() {
+    public String getServerId() {
         return serverId;
     }
 
-    public void setServerId(int serverId) {
+    public void setServerId(String serverId) {
         this.serverId = serverId;
     }
 }

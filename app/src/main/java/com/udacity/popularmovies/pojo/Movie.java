@@ -53,7 +53,11 @@ public class Movie extends Pojo implements Parcelable {
     @SerializedName(MovieEntry.COLUMN_POSTER_PATH)
     private String posterPath;
 
-    public Movie(int serverId, String title, LocalDate releaseDate, int runtime, String overview, boolean markedAsFavourite, double voteAverage, double popularity, String posterPath) {
+    private boolean trailersLoaded;
+
+    private boolean reviewsLoaded;
+
+    public Movie(String serverId, String title, LocalDate releaseDate, int runtime, String overview, boolean markedAsFavourite, double voteAverage, double popularity, String posterPath) {
         super(serverId);
         this.title = title;
         this.releaseDate = releaseDate;
@@ -66,8 +70,7 @@ public class Movie extends Pojo implements Parcelable {
     }
 
     private Movie(Parcel in) {
-        super(in.readInt());
-        this._id = in.readInt();
+        super(in);
         this.title = in.readString();
         this.releaseDate = LocalDate.parse(in.readString(), DateTimeFormatter.ISO_DATE);
         this.runtime = in.readInt();
@@ -76,6 +79,8 @@ public class Movie extends Pojo implements Parcelable {
         this.voteAverage = in.readDouble();
         this.popularity = in.readDouble();
         this.posterPath = in.readString();
+        this.trailersLoaded = in.readInt() == 1;
+        this.reviewsLoaded = in.readInt() == 1;
     }
 
     public static final Parcelable.Creator<Movie> CREATOR
@@ -90,14 +95,8 @@ public class Movie extends Pojo implements Parcelable {
     };
 
     @Override
-    public int describeContents() {
-        return 0;
-    }
-
-    @Override
     public void writeToParcel(Parcel dest, int flags) {
-        dest.writeInt(serverId);
-        dest.writeInt(_id);
+        super.writeToParcel(dest, flags);
         dest.writeString(title);
         dest.writeString(releaseDate.format(DateTimeFormatter.ISO_DATE));
         dest.writeInt(runtime);
@@ -106,6 +105,8 @@ public class Movie extends Pojo implements Parcelable {
         dest.writeDouble(voteAverage);
         dest.writeDouble(popularity);
         dest.writeString(posterPath);
+        dest.writeInt((trailersLoaded) ? 1 : 0);
+        dest.writeInt((reviewsLoaded) ? 1 : 0);
     }
 
     public String getTitle() {
@@ -170,5 +171,21 @@ public class Movie extends Pojo implements Parcelable {
 
     public void setPosterPath(String posterPath) {
         this.posterPath = posterPath;
+    }
+
+    public boolean isTrailersLoaded() {
+        return trailersLoaded;
+    }
+
+    public void setTrailersLoaded(boolean trailersLoaded) {
+        this.trailersLoaded = trailersLoaded;
+    }
+
+    public boolean isReviewsLoaded() {
+        return reviewsLoaded;
+    }
+
+    public void setReviewsLoaded(boolean reviewsLoaded) {
+        this.reviewsLoaded = reviewsLoaded;
     }
 }

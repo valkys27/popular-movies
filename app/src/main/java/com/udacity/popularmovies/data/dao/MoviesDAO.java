@@ -11,6 +11,4 @@ import java.util.List;
 
 public interface MoviesDAO extends DAO<Movie> {
     List<Movie> getList(Category category);
-    int insert(List<Movie> movies);
-    boolean update(Movie movie);
 }

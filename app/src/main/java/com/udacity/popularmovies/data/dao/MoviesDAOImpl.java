@@ -1,16 +1,17 @@
 package com.udacity.popularmovies.data.dao;
 
+import android.content.ContentValues;
 import android.content.Context;
 
+import android.net.Uri;
 import com.udacity.popularmovies.Category;
 import com.udacity.popularmovies.dagger.scope.PerApplication;
-import com.udacity.popularmovies.data.PopularMoviesContract;
 import com.udacity.popularmovies.pojo.Movie;
 import com.udacity.popularmovies.data.PopularMoviesContract.MovieEntry;
 
 import org.chalup.microorm.MicroOrm;
 
-import java.util.List;
+import java.util.*;
 
 import javax.inject.Inject;
 
@@ -38,12 +39,29 @@ public class MoviesDAOImpl extends BaseDAO<Movie> implements MoviesDAO {
     }
 
     @Override
-    protected String getPath() {
-        return PopularMoviesContract.PATH_MOVIE;
+    public int insert(List<Movie> list) {
+        List<ContentValues> cvs = new ArrayList<>();
+        for (Movie movie : list) {
+            Movie old = findByServerId(movie.getServerId());
+            if (old == null) {
+                ContentValues cv = mMicroOrm.toContentValues(movie);
+                cv.remove(ID_KEY);
+                cvs.add(cv);
+            } else {
+                movie.set_id(old.get_id());
+                update(movie);
+            }
+        }
+        return mContext.getContentResolver().bulkInsert(getUri(), cvs.toArray(new ContentValues[0]));
     }
 
     @Override
     protected Class<Movie> getEntityClass() {
         return Movie.class;
+    }
+
+    @Override
+    protected Uri getUri() {
+        return MovieEntry.CONTENT_URI;
     }
 }

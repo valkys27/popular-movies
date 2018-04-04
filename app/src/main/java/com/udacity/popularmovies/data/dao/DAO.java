@@ -11,6 +11,7 @@ import java.util.List;
 public interface DAO<T extends Pojo> {
     List<T> getList(String selection, String[] selectionArgs, String sortOrder);
     T findById(int id);
+    T findByServerId(String serverId);
     int insert(List<T> list);
     boolean update(T element);
 }

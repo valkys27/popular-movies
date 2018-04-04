@@ -20,7 +20,7 @@ import butterknife.*;
 
 public class MainListActivity extends BaseActivity<MainListView, MainListPresenter> implements MainListView {
 
-    @BindView(R.id.movie_list_rv) RecyclerView mRecyclerView;
+    @BindView(R.id.movieList_rv) RecyclerView mRecyclerView;
 
     private MovieAdapter mMovieAdapter;
 

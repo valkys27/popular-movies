@@ -3,14 +3,19 @@ package com.udacity.popularmovies.presenters;
 import android.os.Bundle;
 
 import com.udacity.popularmovies.PopularMoviesApp;
+import com.udacity.popularmovies.data.dao.MoviesDAO;
 import com.udacity.popularmovies.pojo.Movie;
 import com.udacity.popularmovies.views.DetailInfoView;
+
+import javax.inject.Inject;
 
 /**
  * Created by tomas on 26.03.2018.
  */
 
 public class DetailInfoPresenter extends BasePresenter<DetailInfoView> {
+
+    @Inject MoviesDAO moviesDAO;
 
     private Movie movie;
 

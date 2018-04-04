@@ -8,15 +8,15 @@ import android.util.Log;
 import android.view.View;
 import android.widget.*;
 
-import com.udacity.popularmovies.Category;
-import com.udacity.popularmovies.PopularMoviesApp;
-import com.udacity.popularmovies.R;
+import com.udacity.popularmovies.*;
 import com.udacity.popularmovies.activities.DetailActivity;
 import com.udacity.popularmovies.adapters.MovieAdapter;
+import com.udacity.popularmovies.data.dao.MoviesDAO;
 import com.udacity.popularmovies.network.Network;
 import com.udacity.popularmovies.pojo.Movie;
 import com.udacity.popularmovies.views.MainListView;
 
+import javax.inject.Inject;
 import java.util.*;
 
 /**
@@ -33,10 +33,12 @@ public class MainListPresenter extends BasePresenter<MainListView> {
     private static final String POPULAR_LOADED_KEY = "popularLoaded";
     private static final String TOP_RATED_LOADED_KEY = "topRatedLoaded";
 
-    private List<Movie> movieList = null;
+    @Inject MoviesDAO moviesDAO;
+
+    private List<Movie> movieList;
     private Category category = Category.POPULAR;
-    private boolean popularLoaded = false;
-    private boolean topRatedLoaded = false;
+    private boolean popularLoaded;
+    private boolean topRatedLoaded;
     private AdapterView.OnItemSelectedListener onCategorySelectedListener;
 
     public MainListPresenter() {
@@ -88,7 +90,7 @@ public class MainListPresenter extends BasePresenter<MainListView> {
                 view.setData(movieList, category);
         }
         else
-            network.getMovieListBy(category, new OnLoadingHandler());
+            network.getMovieListByCategory(category, new OnLoadingHandler());
     }
 
     private boolean isLoaded() {
@@ -127,15 +129,14 @@ public class MainListPresenter extends BasePresenter<MainListView> {
     private class OnLoadingHandler implements Network.OnLoadingHandler<List<Movie>> {
         @Override
         public void onLoadingSuccess(List<Movie> data) {
-            if (view != null) {
-                moviesDAO.insert(data);
-                movieList = moviesDAO.getList(category);
+            moviesDAO.insert(data);
+            movieList = moviesDAO.getList(category);
+            if (view != null)
                 view.setData(movieList, category);
-                if (category.equals(Category.POPULAR))
-                    popularLoaded = true;
-                else if (category.equals(Category.TOP_RATED))
-                    topRatedLoaded = true;
-            }
+            if (category.equals(Category.POPULAR))
+                popularLoaded = true;
+            else if (category.equals(Category.TOP_RATED))
+                topRatedLoaded = true;
         }
 
         @Override

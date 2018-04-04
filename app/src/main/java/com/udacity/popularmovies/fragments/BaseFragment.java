@@ -6,7 +6,8 @@ import android.support.annotation.*;
 import android.view.*;
 
 import com.hannesdorfmann.mosby3.mvp.MvpFragment;
-import com.udacity.popularmovies.presenters.BasePresenter;
+import com.udacity.popularmovies.pojo.Movie;
+import com.udacity.popularmovies.presenters.*;
 import com.udacity.popularmovies.views.*;
 
 import butterknife.ButterKnife;
@@ -17,11 +18,13 @@ import butterknife.ButterKnife;
 
 public abstract class BaseFragment<V extends BaseView, P extends BasePresenter<V>> extends MvpFragment<V, P> {
 
-    abstract protected int getLayoutId();
+    abstract int getLayoutId();
 
-    @Override
-    public void onCreate(Bundle savedInstanceState) {
-        super.onCreate(savedInstanceState);
+    public static BaseFragment newInstance(BaseFragment fragment, Movie movie) {
+        Bundle args = new Bundle();
+        args.putParcelable(DetailPresenter.MOVIE_KEY, movie);
+        fragment.setArguments(args);
+        return fragment;
     }
 
     @Nullable
@@ -35,16 +38,21 @@ public abstract class BaseFragment<V extends BaseView, P extends BasePresenter<V
     @Override
     public void onViewCreated(View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
+        init();
         if (getArguments() != null)
             getPresenter().readFromBundle(getArguments());
-        init();
         getPresenter().setData();
     }
 
-    protected void init() {}
+    @Override
+    public void onSaveInstanceState(Bundle outState) {
+        super.onSaveInstanceState(outState);
+        getPresenter().writeToBundle(outState);
+    }
+
+    void init() {}
 
     public void showMessage(String message) {
-        assert getActivity() != null;
         ((DetailView)getActivity()).showMessage(message);
     }
 

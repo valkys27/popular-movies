@@ -3,11 +3,13 @@ package com.udacity.popularmovies.presenters;
 import android.os.Bundle;
 import android.util.Log;
 
-import com.udacity.popularmovies.PopularMoviesApp;
-import com.udacity.popularmovies.R;
+import com.udacity.popularmovies.*;
+import com.udacity.popularmovies.data.dao.MoviesDAO;
 import com.udacity.popularmovies.network.Network;
 import com.udacity.popularmovies.pojo.Movie;
 import com.udacity.popularmovies.views.DetailView;
+
+import javax.inject.Inject;
 
 /**
  * Created by tomas on 05.03.2018.
@@ -17,6 +19,8 @@ public class DetailPresenter extends BasePresenter<DetailView> {
 
     public static final String SELECTED_MENU_ITEM_KEY = "selectedMenuItemId";
     public static final String MOVIE_KEY = "movie";
+
+    @Inject MoviesDAO moviesDAO;
 
     private int selectedMenuItemId;
     private Movie movie;
@@ -37,6 +41,8 @@ public class DetailPresenter extends BasePresenter<DetailView> {
             movie = bundle.getParcelable(MOVIE_KEY);
             selectedMenuItemId = bundle.getInt(SELECTED_MENU_ITEM_KEY, R.id.navigation_info);
         }
+        if (view != null)
+            view.setMovieTitle(movie.getTitle());
     }
 
     @Override
@@ -50,6 +56,14 @@ public class DetailPresenter extends BasePresenter<DetailView> {
 
     public void setFavourite(boolean marked) {
         movie.setMarkedAsFavourite(marked);
+    }
+
+    public void setTrailersLoaded() {
+        movie.setTrailersLoaded(true);
+    }
+
+    public void setReviewsLoaded() {
+        movie.setReviewsLoaded(true);
     }
 
     public void setSelectedMenuItemId(int menuItemId) {

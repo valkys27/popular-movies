@@ -1,32 +1,78 @@
 package com.udacity.popularmovies.fragments;
 
-import android.os.Bundle;
+import android.content.Context;
 import android.support.annotation.NonNull;
-import android.support.v4.app.Fragment;
-import android.view.*;
 
+import android.support.v7.widget.RecyclerView;
+import butterknife.BindView;
 import com.udacity.popularmovies.R;
-import com.udacity.popularmovies.pojo.Movie;
+import com.udacity.popularmovies.adapters.ReviewAdapter;
+import com.udacity.popularmovies.pojo.Review;
+import com.udacity.popularmovies.presenters.*;
+import com.udacity.popularmovies.views.DetailReviewsView;
 
-public class DetailReviewsFragment extends Fragment {
+import java.util.List;
 
-    public static DetailReviewsFragment newInstance(Movie movie) {
-        DetailReviewsFragment fragment = new DetailReviewsFragment();
-        Bundle args = new Bundle();
-        fragment.setArguments(args);
-        return fragment;
+public class DetailReviewsFragment extends RecyclerViewFragment<DetailReviewsView, DetailReviewsPresenter> implements DetailReviewsView {
+
+    public static final String TAG = DetailReviewsFragment.class.getName();
+
+    @BindView(R.id.reviewList_rv) RecyclerView mRecyclerView;
+
+    private ReviewAdapter mReviewAdapter;
+    private OnDetailReviewsFragmentListener mListener;
+
+    public interface OnDetailReviewsFragmentListener {
+        void setReviewsLoaded();
+    }
+
+    @NonNull
+    @Override
+    public DetailReviewsPresenter createPresenter() {
+        return new DetailReviewsPresenter();
     }
 
     @Override
-    public void onCreate(Bundle savedInstanceState) {
-        super.onCreate(savedInstanceState);
-        if (getArguments() != null) {
+    public void setData(List<Review> reviews) {
+        mReviewAdapter.setData(reviews);
+    }
+
+    @Override
+    public void setLoaded() {
+        mListener.setReviewsLoaded();
+    }
+
+    @Override
+    public void onAttach(Context context) {
+        super.onAttach(context);
+        if (context instanceof OnDetailReviewsFragmentListener) {
+            mListener = (OnDetailReviewsFragmentListener) context;
+        } else {
+            throw new RuntimeException(context.toString()
+                    + " must implement OnDetailReviewsFragmentListener");
         }
     }
 
     @Override
-    public View onCreateView(@NonNull LayoutInflater inflater, ViewGroup container,
-                             Bundle savedInstanceState) {
-        return inflater.inflate(R.layout.fragment_detail_reviews, container, false);
+    public void onDetach() {
+        super.onDetach();
+        mListener = null;
+    }
+
+    @Override
+    int getLayoutId() {
+        return R.layout.fragment_detail_reviews;
+    }
+
+    @Override
+    RecyclerView.Adapter getAdapter() {
+        if (mReviewAdapter == null)
+            mReviewAdapter = new ReviewAdapter(getContext());
+        return mReviewAdapter;
+    }
+
+    @Override
+    RecyclerView getRecyclerView() {
+        return mRecyclerView;
     }
 }

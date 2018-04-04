@@ -15,7 +15,8 @@ import butterknife.*;
 
 public class DetailInfoFragment extends BaseFragment<DetailInfoView, DetailInfoPresenter> implements DetailInfoView {
 
-    @BindView(R.id.title_tv) TextView title;
+    public static final String TAG = DetailInfoFragment.class.getName();
+
     @BindView(R.id.releaseDate_tv) TextView releaseDate;
     @BindView(R.id.runtime_tv) TextView runtime;
     @BindView(R.id.voteAverage_tv) TextView voteAverage;
@@ -29,14 +30,6 @@ public class DetailInfoFragment extends BaseFragment<DetailInfoView, DetailInfoP
         void setFavourite(boolean marked);
     }
 
-    public static DetailInfoFragment newInstance(Movie movie) {
-        DetailInfoFragment fragment = new DetailInfoFragment();
-        Bundle args = new Bundle();
-        args.putParcelable(DetailPresenter.MOVIE_KEY, movie);
-        fragment.setArguments(args);
-        return fragment;
-    }
-
     @NonNull
     @Override
     public DetailInfoPresenter createPresenter() {
@@ -44,7 +37,7 @@ public class DetailInfoFragment extends BaseFragment<DetailInfoView, DetailInfoP
     }
 
     @Override
-    protected int getLayoutId() {
+    int getLayoutId() {
         return R.layout.fragment_detail_info;
     }
 
@@ -65,7 +58,6 @@ public class DetailInfoFragment extends BaseFragment<DetailInfoView, DetailInfoP
     @Override
     public void setData(Movie movie) {
         setFavourite(movie.isMarkedAsFavourite());
-        title.setText(movie.getTitle());
         releaseDate.setText(Integer.toString(movie.getReleaseDate().getYear()));
         String runtime = (movie.getRuntime() == 0) ? "N/A" : movie.getRuntime() + "min";
         this.runtime.setText(runtime);

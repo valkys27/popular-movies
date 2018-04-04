@@ -1,0 +1,37 @@
+<?xml version="1.0" encoding="utf-8"?>
+<android.support.constraint.ConstraintLayout
+        xmlns:android="http://schemas.android.com/apk/res/android"
+        xmlns:app="http://schemas.android.com/apk/res-auto"
+        xmlns:tools="http://schemas.android.com/tools"
+        android:layout_width="match_parent"
+        android:layout_height="@dimen/trailer_item_height">
+
+    <ImageView
+            android:id="@+id/imageView"
+            android:contentDescription="@string/play_review_image_content_description"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignParentTop="true"
+            android:layout_alignParentBottom="true"
+            android:layout_alignParentStart="true"
+            android:layout_marginTop="@dimen/margin_small"
+            android:layout_marginBottom="@dimen/margin_small"
+            app:srcCompat="@drawable/ic_play_arrow"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent"
+            app:layout_constraintBottom_toBottomOf="parent"/>
+
+    <TextView
+            tools:text="Mad Max: Fury Road - Official Retaliate Trailer [HD]"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:id="@+id/trailerName_tv"
+            android:maxLines="2"
+            android:layout_alignBottom="@+id/imageView"
+            android:layout_alignTop="@+id/imageView"
+            android:layout_marginStart="@dimen/margin_small"
+            app:layout_constraintStart_toEndOf="@+id/imageView"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintBottom_toBottomOf="@+id/imageView"
+            app:layout_constraintTop_toTopOf="@+id/imageView"/>
+</android.support.constraint.ConstraintLayout>

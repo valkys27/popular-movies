@@ -6,21 +6,6 @@
     android:layout_width="match_parent"
     android:layout_height="wrap_content">
 
-    <android.support.constraint.ConstraintLayout
-        android:id="@+id/title_background_cl"
-        android:layout_width="match_parent"
-        android:layout_height="@dimen/detail_activity_title_background_height"
-        android:background="@color/colorAccent"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent">
-
-        <TextView
-            android:id="@+id/title_tv"
-            style="@style/DetailTitleTextView"
-            tools:text="Chappie"/>
-    </android.support.constraint.ConstraintLayout>
-
     <ImageView
         android:id="@+id/detailPoster_iv"
         style="@style/DetailPosterImageView" />
@@ -30,7 +15,7 @@
         android:layout_width="wrap_content"
         style="@style/DetailInfoTextView"
         app:layout_constraintStart_toEndOf="@+id/detailPoster_iv"
-        app:layout_constraintTop_toBottomOf="@+id/title_background_cl"
+        app:layout_constraintTop_toTopOf="parent"
         tools:text="2015" />
 
     <TextView
@@ -53,11 +38,12 @@
 
     <ImageButton
         android:id="@+id/markAsFavourite_ib"
+        android:contentDescription="@string/favourite_button_content_description"
+        android:background="@android:color/background_light"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginStart="@dimen/margin_large"
         android:layout_marginTop="@dimen/margin_small"
-        android:background="@android:color/background_light"
         app:layout_constraintStart_toEndOf="@+id/detailPoster_iv"
         app:layout_constraintTop_toBottomOf="@+id/voteAverage_tv" />
 
@@ -65,8 +51,6 @@
         android:id="@+id/overview_tv"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_marginEnd="@dimen/margin_small"
-        android:layout_marginStart="@dimen/margin_small"
         android:layout_marginTop="@dimen/margin_medium"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"

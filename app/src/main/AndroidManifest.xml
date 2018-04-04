@@ -22,14 +22,24 @@
             </intent-filter>
         </activity>
 
-        <provider
-            android:name=".data.contentProviders.MoviesContentProvider"
-            android:authorities="com.udacity.popularmovies"
-            android:exported="false" />
-
         <activity
             android:name=".activities.DetailActivity"
             android:parentActivityName=".activities.MainListActivity" />
+
+        <provider
+                android:name=".data.contentProviders.MoviesContentProvider"
+                android:authorities="com.udacity.popularmovies.movieprovider"
+                android:exported="false" />
+
+        <provider
+                android:name=".data.contentProviders.TrailersContentProvider"
+                android:authorities="com.udacity.popularmovies.trailerprovider"
+                android:exported="false" />
+
+        <provider
+                android:name=".data.contentProviders.ReviewsContentProvider"
+                android:authorities="com.udacity.popularmovies.reviewprovider"
+                android:exported="false" />
     </application>
 
 </manifest>

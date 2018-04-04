@@ -26,11 +26,11 @@
     <style name="DetailPosterImageView">
         <item name="android:layout_width">@dimen/poster_width</item>
         <item name="android:layout_height">@dimen/poster_height</item>
-        <item name="android:layout_marginStart">@dimen/margin_medium</item>
+        <item name="android:layout_marginStart">@dimen/margin_small</item>
         <item name="android:layout_marginTop">@dimen/margin_small</item>
         <item name="android:contentDescription">@string/poster_content_description</item>
         <item name="layout_constraintStart_toStartOf">parent</item>
-        <item name="layout_constraintTop_toBottomOf">@id/title_background_cl</item>
+        <item name="layout_constraintTop_toTopOf">parent</item>
     </style>
 
     <style name="DetailTitleTextView">

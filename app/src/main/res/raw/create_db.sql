@@ -1,6 +1,6 @@
 create table if not exists movies (
     _id integer not null constraint movies_pk primary key autoincrement,
-    id integer not null unique,
+    id varchar(24) not null unique,
     title varchar(60) not null,
     release_date varchar(10) not null,
     runtime integer not null,
@@ -13,7 +13,7 @@ create table if not exists movies (
 
 create table if not exists reviews (
     _id integer not null constraint reviews_pk primary key autoincrement,
-    id integer not null unique,
+    id varchar(24) not null unique,
     movie_id integer not null,
     author varchar(70) not null,
     content text not null,
@@ -23,8 +23,9 @@ create table if not exists reviews (
 
 create table if not exists trailers (
     _id integer not null constraint trailers_pk primary key autoincrement,
-    id integer not null unique,
+    id varchar(24) not null unique,
     movie_id integer not null,
+    name varchar(70) not null,
     "key" text not null,
     constraint trailers_movies foreign key (movie_Id)
         references movies (_id)

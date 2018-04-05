@@ -43,13 +43,15 @@ public class MoviesDAOImpl extends BaseDAO<Movie> implements MoviesDAO {
         List<ContentValues> cvs = new ArrayList<>();
         for (Movie movie : list) {
             Movie old = findByServerId(movie.getServerId());
+            ContentValues cv = mMicroOrm.toContentValues(movie);
             if (old == null) {
-                ContentValues cv = mMicroOrm.toContentValues(movie);
-                cv.remove(ID_KEY);
+                cv.remove(MovieEntry._ID);
                 cvs.add(cv);
             } else {
-                movie.set_id(old.get_id());
-                update(movie);
+                cv.put(MovieEntry._ID, old.get_id());
+                cv.put(MovieEntry.COLUMN_RUNTIME, old.getRuntime());
+                cv.remove(MovieEntry.COLUMN_MARKED_AS_FAVOURITE);
+                update(cv);
             }
         }
         return mContext.getContentResolver().bulkInsert(getUri(), cvs.toArray(new ContentValues[0]));

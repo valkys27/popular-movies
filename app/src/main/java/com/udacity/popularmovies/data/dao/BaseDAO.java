@@ -74,8 +74,12 @@ public abstract class BaseDAO<T extends Pojo> implements DAO<T> {
     @Override
     public boolean update(T element) {
         ContentValues cv = mMicroOrm.toContentValues(element);
+        return update(cv);
+    }
+
+    boolean update(ContentValues cv) {
         String selection = ID_KEY + " = ?";
-        String[] selectionArgs = {Integer.toString(element.get_id())};
+        String[] selectionArgs = {Integer.toString(cv.getAsInteger(ID_KEY))};
         return mContext.getContentResolver().update(getUri(), cv, selection, selectionArgs) == 1;
     }
 }
